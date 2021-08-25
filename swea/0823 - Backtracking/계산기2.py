@@ -7,11 +7,11 @@ sys.stdin = open(f"{parent_dir}\{file_name} input.txt")
 input = sys.stdin.readline
 
 
+# 괄호가 없는 경우의 계산
 priority = {'+': 1, '*': 2}
 
 
 def to_postfix(exp):
-    # 괄호가 없는 경우의 계산
     op_stack = []
     result = []
 
@@ -21,9 +21,12 @@ def to_postfix(exp):
         else:
             if not op_stack:
                 op_stack.append(char)
+            # 우선순위가 높으면 나중에 처리
             elif priority[char] > priority[op_stack[-1]]:
                 op_stack.append(char)
+            # 우선순위가 낮거나 같은 경우
             else:
+                # 앞쪽의 우선순위가 높은 것들을 먼저 처리
                 while priority[char] <= priority[op_stack[-1]]:
                     result.append(op_stack.pop())
                     if not op_stack:
