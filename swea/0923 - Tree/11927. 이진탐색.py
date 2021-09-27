@@ -9,19 +9,30 @@ input = sys.stdin.readline
 
 
 """
-이진 트리 생성: 올라가며 대소 비교, 내려오며 대소 비교
-
-1. 삽입된 쪽 서브 트리 바닥 -> 루트까지 거슬러 올라옴
-2. 루트를 지나서 맞은 편으로 이동
-3. 맞은 편 꼭대기부터 -> 바닥까지 이동
-
-i) 형제 없음 & 부모보다 큼 -> 부모랑만 치환
-ii) 형제 있음 & 부모보다 큼 -> '회전'
-    
-
+"이진 탐색 트리는 어떤 경우에도 저장된 값이 
+왼쪽 서브트리의 루트 < 현재 노드 < 오른쪽 서브 트리의 루트"
+순으로 값이 증가
+-> L-V-R = 중위순회!
+-> 중위순회 방식으로 채워넣기!
 """
 
-def make_binary_tree(N):
-    tree = []
-    for i in range(1, N + 1):
-        tree.append(i)
+
+def inorder(tree, i, N):
+    global num
+
+    # 자식 노드까지 = 트리 최대 범위까지
+    if i <= N:
+        inorder(tree, 2*i, N)
+        tree[i] = num
+        num += 1
+        inorder(tree, 2*i + 1, N)
+    
+
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    tree = [0] * (N + 1)
+    
+    num = 1
+    inorder(tree, 1, N)
+    print('#{} {} {}'.format(test_case, tree[1], tree[N//2]))
