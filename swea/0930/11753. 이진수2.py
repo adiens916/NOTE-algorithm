@@ -11,23 +11,27 @@ sys.stdin = open(f"{parent_dir}\{file_name} input.txt")
 
 T = int(input())
 for test_case in range(1, T + 1):
-    print(f'#{test_case}', end=' ')
+    print('#{}'.format(test_case), end=' ')
 
     decimal = input().lstrip('0.')
+    integer = int(decimal)
     digits = len(decimal)
-    decimal = int(decimal)
-    bin_decimal = ''
+    binary_float = []
+    
+    while True: 
+        #if integer % (10 ** digits) == 0:
+        if integer == 0:
+            print(*binary_float, sep='')
+            break
 
-    while decimal % (10 ** digits) != 0:
-        decimal *= 2
-        if decimal >= (10 ** digits):
-            bin_decimal += '1'
-        else:
-            bin_decimal += '0'
-
-        decimal %= (10 ** digits)
-        if len(bin_decimal) > 12:
+        if len(binary_float) > 12:
             print('overflow')
             break 
-    else:
-        print(bin_decimal)
+        
+        integer *= 2
+        if integer >= (10 ** digits):
+            binary_float.append(1)
+        else:
+            binary_float.append(0)
+
+        integer %= (10 ** digits)
