@@ -20,7 +20,8 @@ def permut(k, prev, cur_sum):
         min_sum = min(cur_sum + arr[prev][0], min_sum)
     else:
         # 방문 체크를 이용한 순열
-        for i in range(N):
+        # for i in range(N):
+        for i in range(1, N):
             if not visited[i]:
                 visited[i] = True
                 # 이전 지점과, 이전 지점 ~ 현재 지점까지의 비용 추가
@@ -36,7 +37,7 @@ for test_case in range(1, T + 1):
 
     # 방문 배열. 첫 번째는 무조건 방문한 채로 시작.
     visited = [False] * N
-    visited[0] = True
+    # visited[0] = True
     permut(1, 0, 0)
 
     print('#{} {}'.format(test_case, min_sum))
