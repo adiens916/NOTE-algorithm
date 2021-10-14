@@ -10,7 +10,7 @@ input = sys.stdin.readline
 def dfs(s, cur_len):
     global max_len
 
-    # 들어가고 나서 방문 체크
+    # 방문 체크 (들어간 다음 하면 중복 줄일 수 있음)
     visited[s] = True
 
     has_candidates = False
@@ -21,12 +21,13 @@ def dfs(s, cur_len):
             has_candidates = True
             # 방문할 게 있으면 들어가기.
             dfs(v, cur_len + 1)
-    # FIXME: '현재 지점'에서 더 이상 갈 곳 없었으면 종료
+
+    # FIXME: 종료 조건 - '현재 지점'에서 더 이상 갈 곳 없었음
     if not has_candidates:
         if cur_len > max_len:
             max_len = cur_len
 
-    # 되돌아가기 전에 방문 해제
+    # 방문 해제 (다른 경로 대비)
     visited[s] = False
 
 
