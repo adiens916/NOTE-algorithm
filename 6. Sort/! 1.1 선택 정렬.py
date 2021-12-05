@@ -2,12 +2,12 @@
 
 def selection_sorting(arr):
     N = len(arr)
-    for i in range(0, N - 1):
-        min_index = i
-        for j in range(i + 1, N):
-            if arr[min_index] > arr[j]:
-                min_index = j
-        arr[i], arr[min_index] = arr[min_index], arr[i]
+    for put in range(0, N - 1):
+        min_index = put
+        for pick in range(put + 1, N):
+            if arr[min_index] > arr[pick]:
+                min_index = pick
+        arr[put], arr[min_index] = arr[min_index], arr[put]
 
 
 arr = [7, 5, 9, 0, 3, 1, 6, 2, 4, 8]
