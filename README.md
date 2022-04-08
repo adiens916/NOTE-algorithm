@@ -1,30 +1,12 @@
-# 알고리즘 오답노트
-- 틀린 문제를 중점적으로 풀 수 있도록 함.
-- 알고리즘을 종류별로 나눔.
-  - '이것이 코딩 테스트다'의 목차 순서대로 분류
+### 폴더 & 링크 구조
+
+- 문제들 소스 코드는 출처 사이트 & 유형별로 묶어 폴더로 관리
+- 각 문제들의 하이퍼 링크를 마크다운 문서로 관리
+  - 파일 위치 수정 시 확장 프로그램을 이용, 일괄 변경 [(markdown-link-updator)](https://marketplace.visualstudio.com/items?itemName=mathiassoeholm.markdown-link-updater)
 
 
 
-### 파일명 형식
+### 명명 규칙
 
-`{어려움 여부} {출처} {문제 난이도} {문제 번호} {문제 제목}`
-
-예) ! BOJ S 1234 어떤 문제
-
-
-
-- 어려움 여부
-
-  잘 못 풀 때마다 !(느낌표) 한 개씩 추가
-
-- 출처 
-  - BOJ: 백준 (Baekjon Online Judge)
-  - JO: 정올 (JungOl)
-  - SWEA: SW Expert Academy
-  - TCT: 이것이 코딩 테스트다 (This is Coding Test)
-
-- 문제 난이도:
-  - 1, 2, 3, 4, ... 순으로 난이도가 상승한다.
-  - 순서대로 Bronze, Silver, Gold, Platinum 와 동일 (백준인 경우)
-  - 순서대로 Language, Beginner, Intermediate, Advanced와 동일 (정올인 경우)
-
+- 문제 출처 사이트 이름: 약어 대신 사이트 공식 표기
+  - 나중에 보면 암호 같아서 헷갈림
