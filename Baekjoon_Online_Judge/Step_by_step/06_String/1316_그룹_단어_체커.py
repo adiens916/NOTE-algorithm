@@ -35,6 +35,7 @@ for _ in range(N):
     string = input().rstrip()
     if is_group_word(string):
         count += 1
+    # 힌트: https://www.acmicpc.net/source/13591691
     # if list(word) == sorted(word, key=word.find):
     #     result += 1
 
