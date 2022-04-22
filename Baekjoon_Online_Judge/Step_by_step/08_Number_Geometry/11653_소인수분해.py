@@ -28,22 +28,22 @@ def factorize(n: int):
     # 합성수가 하나라도 있는 한 반복
     while i >= 0:
         # 소인수분해는 제곱근 이하로만 가능
-        sqrt_floor = math.floor(math.sqrt(composites[i]))
+        sqrt = int(composites[i] ** 0.5)
         # 나누는 수가 1보다 큰 경우
         k = 0
-        while sqrt_floor - k > 1:
+        while sqrt - k > 1:
             # 나눠떨어지는지 확인
-            if composites[i] % (sqrt_floor - k) == 0:
+            if composites[i] % (sqrt - k) == 0:
                 # 나눠떨어진 수를 현재 합성수 위치에 덮어씌움
-                composites[i] = composites[i] // (sqrt_floor - k)
+                composites[i] = composites[i] // (sqrt - k)
                 # 나누는 수를 다음 합성수로 넣음
                 i += 1
-                composites[i] = sqrt_floor - k
+                composites[i] = sqrt - k
                 break
             k += 1
         
         # 나눠떨어지지 않은 경우, 소수임
-        if sqrt_floor - k == 1:
+        if sqrt - k == 1:
             # 해당 수를 소수로 옮기고, 인덱스 조정
             factors[j] = composites[i]
             i -= 1
