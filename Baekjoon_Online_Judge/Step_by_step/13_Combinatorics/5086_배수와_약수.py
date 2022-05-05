@@ -1,0 +1,21 @@
+import sys
+from pathlib import Path
+
+parent_dir = Path(__file__).parent
+file_name = Path(__file__).stem
+
+sys.stdin = open(f"{parent_dir}\{file_name}_input.txt")
+input = sys.stdin.readline
+
+
+while True:
+    A, B = map(int, input().split())
+    if A == B == 0:
+        break
+
+    if B % A == 0:
+        print('factor')
+    elif A % B == 0:
+        print('multiple')
+    else:
+        print('neither')
