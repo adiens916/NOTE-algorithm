@@ -75,7 +75,7 @@ def create_problem_set(problem_file, in_folder=True):
     if in_folder:
         target_dir = make_directory_for_today()
     else:
-        target_dir = '.'
+        target_dir = Path(__file__).parent
 
     text = open(f"{Path(__file__).parent}\{problem_file}", "rt", encoding='UTF8')
     is_num_before = False
