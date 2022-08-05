@@ -4,13 +4,16 @@
 사용법
 1. 첫 줄에 문제 번호를 적고
 2. 그 다음 줄에 문제 이름을 적어준다.
-3. 이렇게 문제 번호 - 문제 이름 순서로 번갈아 적어준다.
 
-예시
+입력 예시
 1234
 아기 상어
 5678
 아닛?!
+
+결과 예시
+1234_아기_상어.py
+5678_아닛?!.py
 
 """
 
@@ -20,14 +23,14 @@ from datetime import date
 
 
 # input.txt를 읽어오기 위해 소스 첫 부분에 써주는 코드
-input_template = '''\
-import sys
+INPUT_TEMPLATE = '''\
 from pathlib import Path
-
-parent_dir = Path(__file__).parent
+directory = Path(__file__).parent
 file_name = Path(__file__).stem
+input_text = f"{directory}\{file_name}_input.txt"
 
-sys.stdin = open(f"{parent_dir}\{file_name}_input.txt")
+import sys
+sys.stdin = open(input_text)
 input = sys.stdin.readline'''
 
 
@@ -92,7 +95,7 @@ def create_problem_set(problem_file, in_folder=True):
             f = open(f"{target_dir}\{file_name}.py", "w", encoding="UTF8")
             
             # 파일 처음에 input 읽어오는 문구 작성
-            f.write(input_template)
+            f.write(INPUT_TEMPLATE)
             f.close()
 
             # input txt 생성
