@@ -1,0 +1,10 @@
+42
+1 -1 100 -200
+0 1 0 1 0
+1 0 1 0 1
+0 1 0 1 0
+0 0 1 0 0
+hello
+foo bar
+apple banana lemon
+prune peach peanut
