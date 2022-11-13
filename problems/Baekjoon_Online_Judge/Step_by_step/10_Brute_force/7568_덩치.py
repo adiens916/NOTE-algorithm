@@ -1,6 +1,15 @@
 """
-몸무게가 크고, 키도 큰 경우,
-몸무게와 키의 *합*도 크다.
+(10, 200)과 (200, 10)은 같은 덩치.
+이 둘의 공통점은 몸무게와 키의 합이 같음!
+
+: 몸무게가 크고, 키도 큰 경우,
+몸무게와 키의 '합'도 크다.
+
+! '크다'의 기준을 글자 말고 "수식"으로 제대로 써놓기
+
+! 문제 예시에 현혹되지 말고, "조건" 보기
+"만일 자신보다 더 큰 덩치의 사람이 k명이라면, 그 사람의 덩치 등수는 k+1"
+= 누적 등수가 아니라, 오로지 자신을 기준으로만 비교 
 """
 
 import sys
@@ -14,6 +23,7 @@ input = sys.stdin.readline
 
 
 def main():
+    # 입력
     N = int(input())
     body_sizes = []
     for i in range(N):
@@ -21,39 +31,29 @@ def main():
         body_sizes.append((weight, height, i))
 
     # 몸무게 + 키 합으로 정렬
-    body_sizes.sort(key=lambda x: sum_weight_height(x), reverse=True)
+    body_sizes.sort(key=lambda x: x[0] + x[1], reverse=True)
 
+    # # 덩치 등수 배열 만들기
     body_ranks = [0] * N
-    top = body_sizes[0][2]
-    current_body_rank = 1
-    body_ranks[top] = current_body_rank
-    # print(body_ranks)
 
-    duplicate_count = 0
-    for i in range(1, N):
-        prev_weight, prev_height, _ = body_sizes[i - 1]
-        cur_weight, cur_height, k = body_sizes[i]
+    # 모든 사람을 기준으로 비교
+    for i in range(N):
+        cur_weight = body_sizes[i][0]
+        cur_height = body_sizes[i][1]
+        cur_index = body_sizes[i][2]
 
-        # 몸무게랑 키 둘 다 같은 경우
-        if cur_weight == prev_weight and cur_height == prev_height:
-            body_ranks[k] = current_body_rank
-        # 몸무게랑 키 둘 다 작은 경우
-        elif cur_weight <= prev_weight and cur_height <= prev_height:
-            current_body_rank += 1
-            # 기존 중복 등수 전부 누적
-            current_body_rank += duplicate_count
-            duplicate_count = 0
-            body_ranks[k] = current_body_rank
-        # 몸무게만 작거나, 키만 작은 경우
-        else:
-            duplicate_count += 1
-            body_ranks[k] = current_body_rank
+        # 자기보다 합이 큰 사람 중에, 덩치 큰 사람 찾기
+        bigger_size_num = 0
+        for j in range(i):
+            prev_weight = body_sizes[j][0]
+            prev_height = body_sizes[j][1]
+            # 오직 자기 자신만 기준으로 해서 비교
+            if cur_weight < prev_weight and cur_height < prev_height:
+                bigger_size_num += 1
+
+        body_ranks[cur_index] = bigger_size_num + 1
 
     print(*body_ranks)
-
-
-def sum_weight_height(x):
-    return x[0] + x[1]
 
 
 main()
