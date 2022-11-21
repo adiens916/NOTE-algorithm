@@ -1,9 +1,31 @@
 /**
- * JavaScript 입력을 도와주는 클래스.
- * 상황에 맞는 메서드를 골라 입력값 추출.
- * 어떻게 쓰는지는 아래 solution 예시를 참고해 실행시켜보면 됨.
+ * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
+ * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
  *
- * 주의: 답안 제출 시 출력 오류가 나는 경우, 71번째의 빈 줄 추가하는 코드 제거하기.
+ * 기본적으로 {파일 이름}_input.txt에 적힌 입력들을 읽어옵니다.
+ * 제출 시에는 solution 함수를 포함해서 맨 끝까지 복사해서 붙여넣어야 합니다.
+ *
+ * 입력 예시
+ * - 한 줄에 있는 정수 한 개:
+ * `const n = input.readInt();`
+ *
+ * - 한 줄에 있는 정수 여러 개 (공백으로 구분):
+ * `const numbers = input.readIntArr();`
+ *
+ * - 여러 줄에 있는 정수 여러 개:
+ * `const numberArr = input.readIntArrForLines(4);`
+ *
+ * - 한 줄에 있는 문자열 하나:
+ * `const word = input.readStr();`
+ *
+ * - 한 줄에 있는 문자열 여러 개 (공백으로 구분):
+ * `const words = input.readStr();`
+ *
+ * - 여러 줄에 있는 문자열 여러 개:
+ * `const wordArr = input.readInt();`
+ *
+ * 주의: 답안 제출 시 출력 오류가 나는 경우,
+ * 71번째의 빈 줄 추가하는 코드 제거하기.
  */
 
 /** @param {Input} input */
