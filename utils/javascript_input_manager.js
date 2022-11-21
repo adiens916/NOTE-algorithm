@@ -6,23 +6,23 @@
  * 주의: 답안 제출 시 출력 오류가 나는 경우, 71번째의 빈 줄 추가하는 코드 제거하기.
  */
 
-/** @param {InputManager} inputManager */
-function solution(inputManager) {
-  const n = inputManager.getNumberInLine();
-  const numbers = inputManager.getNumberArrayInLine();
-  const arr = inputManager.getNumberArrayInMultiLine(4);
+/** @param {Input} input */
+function solution(input) {
+  const n = input.readInt();
+  const numbers = input.readIntArr();
+  const arr = input.readIntArrForLines(4);
   console.log("N: ", n);
   console.log("numbers: ", numbers);
   console.log("arr: ", arr);
 
-  const string = inputManager.getStringInLine();
-  const words = inputManager.getStringArrayInLine();
-  const wordArr = inputManager.getStringArrayInMultiLine(2);
+  const string = input.readStr();
+  const words = input.readStrArr();
+  const wordArr = input.readStrArrForLines(2);
   console.log(string, "/", words);
   console.log(wordArr);
 }
 
-class InputManager {
+class Input {
   // 기본값은 파일을 통해 입력받음. OJ 제출 시에는 false로 바꿔야 함!
   #inputByFile = true;
   // 입력 텍스트 파일 이름은 {현재 파일 이름}_input.txt 형식임
@@ -79,12 +79,12 @@ class InputManager {
     this.#inputs.push(element);
   }
 
-  getNumberInLine() {
+  readInt() {
     return parseInt(this.#inputs.shift());
   }
 
   /** @returns {Array<number>} */
-  getNumberArrayInLine() {
+  readIntArr() {
     return this.#inputs
       .shift()
       .split(" ")
@@ -92,17 +92,17 @@ class InputManager {
   }
 
   /** @param {number} lineNumber */
-  getNumberArrayInMultiLine(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.getNumberArrayInLine());
+  readIntArrForLines(lineNumber) {
+    return [...Array(lineNumber).keys()].map(() => this.readIntArr());
   }
 
   /** @returns {string} */
-  getStringInLine() {
+  readStr() {
     return this.#inputs.shift().trim();
   }
 
   /** @returns {Array<string>} */
-  getStringArrayInLine() {
+  readStrArr() {
     return this.#inputs
       .shift()
       .split(" ")
@@ -110,9 +110,9 @@ class InputManager {
   }
 
   /** @param {number} lineNumber */
-  getStringArrayInMultiLine(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.getStringArrayInLine());
+  readStrArrForLines(lineNumber) {
+    return [...Array(lineNumber).keys()].map(() => this.readStrArr());
   }
 }
 
-new InputManager();
+new Input();
