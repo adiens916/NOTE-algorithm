@@ -93,7 +93,8 @@ class Input {
 
   /** @param {number} lineNumber */
   readIntArrForLines(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.readIntArr());
+    const lines = [...Array(lineNumber).keys()];
+    return lines.map(() => this.readIntArr());
   }
 
   /** @returns {string} */
@@ -111,7 +112,8 @@ class Input {
 
   /** @param {number} lineNumber */
   readStrArrForLines(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.readStrArr());
+    const lines = [...Array(lineNumber).keys()];
+    return lines.map(() => this.readStrArr());
   }
 }
 
