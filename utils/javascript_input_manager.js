@@ -1,28 +1,50 @@
 /**
- * JavaScript 입력을 도와주는 클래스.
- * 상황에 맞는 메서드를 골라 입력값 추출.
- * 어떻게 쓰는지는 아래 solution 예시를 참고해 실행시켜보면 됨.
+ * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
+ * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
  *
- * 주의: 답안 제출 시 출력 오류가 나는 경우, 71번째의 빈 줄 추가하는 코드 제거하기.
+ * 기본적으로 {파일 이름}_input.txt에 적힌 입력들을 읽어옵니다.
+ * 제출 시에는 solution 함수를 포함해서 맨 끝까지 복사해서 붙여넣어야 합니다.
+ *
+ * 입력 예시
+ * - 한 줄에 있는 정수 한 개:
+ * `const n = input.readInt();`
+ *
+ * - 한 줄에 있는 정수 여러 개 (공백으로 구분):
+ * `const numbers = input.readIntArr();`
+ *
+ * - 여러 줄에 있는 정수 여러 개:
+ * `const numberArr = input.readIntArrForLines(4);`
+ *
+ * - 한 줄에 있는 문자열 하나:
+ * `const word = input.readStr();`
+ *
+ * - 한 줄에 있는 문자열 여러 개 (공백으로 구분):
+ * `const words = input.readStr();`
+ *
+ * - 여러 줄에 있는 문자열 여러 개:
+ * `const wordArr = input.readInt();`
+ *
+ * 주의: 답안 제출 시 출력 오류가 나는 경우,
+ * 71번째의 빈 줄 추가하는 코드 제거하기.
  */
 
-/** @param {InputManager} inputManager */
-function solution(inputManager) {
-  const n = inputManager.getNumberInLine();
-  const numbers = inputManager.getNumberArrayInLine();
-  const arr = inputManager.getNumberArrayInMultiLine(4);
+/** @param {Input} input */
+function solution(input) {
+  const n = input.readInt();
+  const numbers = input.readIntArr();
+  const arr = input.readIntArrForLines(4);
   console.log("N: ", n);
   console.log("numbers: ", numbers);
   console.log("arr: ", arr);
 
-  const string = inputManager.getStringInLine();
-  const words = inputManager.getStringArrayInLine();
-  const wordArr = inputManager.getStringArrayInMultiLine(2);
+  const string = input.readStr();
+  const words = input.readStrArr();
+  const wordArr = input.readStrArrForLines(2);
   console.log(string, "/", words);
   console.log(wordArr);
 }
 
-class InputManager {
+class Input {
   // 기본값은 파일을 통해 입력받음. OJ 제출 시에는 false로 바꿔야 함!
   #inputByFile = true;
   // 입력 텍스트 파일 이름은 {현재 파일 이름}_input.txt 형식임
@@ -79,12 +101,12 @@ class InputManager {
     this.#inputs.push(element);
   }
 
-  getNumberInLine() {
+  readInt() {
     return parseInt(this.#inputs.shift());
   }
 
   /** @returns {Array<number>} */
-  getNumberArrayInLine() {
+  readIntArr() {
     return this.#inputs
       .shift()
       .split(" ")
@@ -92,17 +114,18 @@ class InputManager {
   }
 
   /** @param {number} lineNumber */
-  getNumberArrayInMultiLine(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.getNumberArrayInLine());
+  readIntArrForLines(lineNumber) {
+    const lines = [...Array(lineNumber).keys()];
+    return lines.map(() => this.readIntArr());
   }
 
   /** @returns {string} */
-  getStringInLine() {
+  readStr() {
     return this.#inputs.shift().trim();
   }
 
   /** @returns {Array<string>} */
-  getStringArrayInLine() {
+  readStrArr() {
     return this.#inputs
       .shift()
       .split(" ")
@@ -110,9 +133,10 @@ class InputManager {
   }
 
   /** @param {number} lineNumber */
-  getStringArrayInMultiLine(lineNumber) {
-    return [...Array(lineNumber).keys()].map(() => this.getStringArrayInLine());
+  readStrArrForLines(lineNumber) {
+    const lines = [...Array(lineNumber).keys()];
+    return lines.map(() => this.readStrArr());
   }
 }
 
-new InputManager();
+new Input();
