@@ -6,14 +6,14 @@ function solution(input) {
   for (let i = 0; i < N; i++) {
     const inputs = input.readStrArr();
     const { command, X } = splitInput(inputs);
+    // console.log(command, X);
+
     if (X) {
       dequeue[command](X);
     } else {
       dequeue[command]();
     }
   }
-
-  dequeue.print();
 }
 
 /** @param {string} inputs */
@@ -46,34 +46,64 @@ class Deque {
   }
 
   push_back(X) {
-    console.log("push_back!");
+    this.backIdx -= 1;
+    this.dequeue[this.backIdx] = X;
+    this.count += 1;
   }
 
   pop_front() {
-    console.log("pop_front!");
+    if (this.count > 0) {
+      const X = this.dequeue[this.frontIdx];
+      this.front += 1;
+      this.count -= 1;
+
+      console.log(X);
+    } else {
+      console.log(-1);
+    }
   }
 
   pop_back() {
-    console.log("pop_back!");
+    if (this.count > 0) {
+      const X = this.dequeue[this.backIdx];
+      this.back += 1;
+      this.count -= 1;
+
+      console.log(X);
+    } else {
+      console.log(-1);
+    }
   }
 
   size() {
-    console.log("size!");
+    console.log(this.count);
   }
 
   empty() {
-    console.log("empty");
+    if (this.count == 0) {
+      console.log(1);
+    } else {
+      console.log(0);
+    }
   }
 
   front() {
-    console.log("front!");
+    if (this.count > 0) {
+      console.log(this.dequeue[this.frontIdx]);
+    } else {
+      console.log(-1);
+    }
   }
 
   back() {
-    console.log("back!");
+    if (this.count > 0) {
+      console.log(this.dequeue[this.backIdx]);
+    } else {
+      console.log(-1);
+    }
   }
 
-  print() {
+  printDequeue() {
     console.log(this.dequeue);
   }
 }
@@ -124,7 +154,7 @@ class Input {
       })
       .on("close", () => {
         // 입력과 출력 사이를 띄우기 위해 한 줄 추가
-        console.log("");
+        console.log("\n");
 
         solution(this);
         process.exit();
