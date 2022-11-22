@@ -1,13 +1,80 @@
 /** @param {Input} input */
 function solution(input) {
   const N = input.readInt();
+  const dequeue = new Deque(N);
 
   for (let i = 0; i < N; i++) {
-    const command = input.readStrArr();
-    console.log(command[0]);
-    if (command.length == 2) {
-      console.log("num:", command[1]);
+    const inputs = input.readStrArr();
+    const { command, X } = splitInput(inputs);
+    if (X) {
+      dequeue[command](X);
+    } else {
+      dequeue[command]();
     }
+  }
+
+  dequeue.print();
+}
+
+/** @param {string} inputs */
+function splitInput(inputs) {
+  const command = inputs[0];
+
+  let X = null;
+  if (inputs.length == 2) {
+    X = parseInt(inputs[1]);
+  }
+
+  return { command, X };
+}
+
+class Deque {
+  dequeue = Array();
+  frontIdx = -1;
+  backIdx = -1;
+  count = 0;
+
+  constructor(N) {
+    this.dequeue = Array(N);
+    this.frontIdx = N;
+  }
+
+  push_front(X) {
+    this.frontIdx -= 1;
+    this.dequeue[this.frontIdx] = X;
+    this.count += 1;
+  }
+
+  push_back(X) {
+    console.log("push_back!");
+  }
+
+  pop_front() {
+    console.log("pop_front!");
+  }
+
+  pop_back() {
+    console.log("pop_back!");
+  }
+
+  size() {
+    console.log("size!");
+  }
+
+  empty() {
+    console.log("empty");
+  }
+
+  front() {
+    console.log("front!");
+  }
+
+  back() {
+    console.log("back!");
+  }
+
+  print() {
+    console.log(this.dequeue);
   }
 }
 
@@ -26,7 +93,7 @@ class Input {
       this.#makeInputFileName();
       this.#setInputStreamAsFile();
     }
-    this.#initReadline();
+    this.#run();
   }
 
   #makeInputFileName() {
@@ -44,7 +111,7 @@ class Input {
     this.#inputStream = fileStream;
   }
 
-  #initReadline() {
+  #run() {
     const readline = require("readline");
     const reader = readline.createInterface({
       input: this.#inputStream,
