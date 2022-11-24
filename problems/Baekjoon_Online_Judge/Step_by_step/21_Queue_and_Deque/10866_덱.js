@@ -4,15 +4,9 @@ function solution(input) {
   const dequeue = new Deque(N);
 
   for (let i = 0; i < N; i++) {
-    const inputs = input.readStrArr();
+    const inputs = input.readStr().split(" ");
     const { command, X } = splitInput(inputs);
-    // console.log(command, X);
-
-    if (X) {
-      dequeue[command](X);
-    } else {
-      dequeue[command]();
-    }
+    dequeue[command](X);
   }
 }
 
@@ -30,32 +24,56 @@ function splitInput(inputs) {
 
 class Deque {
   dequeue = Array();
-  frontIdx = -1;
-  backIdx = -1;
+  max = 0;
+  head = -1;
+  tail = -1;
   count = 0;
 
   constructor(N) {
     this.dequeue = Array(N);
-    this.frontIdx = N;
+    this.max = N;
   }
 
   push_front(X) {
-    this.frontIdx -= 1;
-    this.dequeue[this.frontIdx] = X;
+    // 앞으로 이동
+    this.head -= 1;
+    // 넣기 전 인덱스 유효해야 함
+    this.head = this.#adjust_index(this.head);
+
+    // 넣기
+    this.dequeue[this.head] = X;
     this.count += 1;
+
+    // 다른 쪽 끝도 위치 보장
+    this.#sync_index(this.head);
   }
 
   push_back(X) {
-    this.backIdx -= 1;
-    this.dequeue[this.backIdx] = X;
+    this.tail += 1;
+    this.tail = this.#adjust_index(this.tail);
+
+    this.dequeue[this.tail] = X;
     this.count += 1;
+
+    this.#sync_index(this.tail);
   }
 
   pop_front() {
     if (this.count > 0) {
-      const X = this.dequeue[this.frontIdx];
-      this.front += 1;
+      // 제거
+      // push 단계에서 유효한 위치를 보장하므로,
+      // pop 때는 바로 제거 가능
+      const X = this.dequeue[this.head];
+
+      // 뒤로 이동
+      this.head += 1;
       this.count -= 1;
+
+      // 이동 후 위치 조정
+      this.head = this.#adjust_index(this.head);
+
+      // 다른 쪽도 위치 조정
+      this.#sync_index(this.head);
 
       console.log(X);
     } else {
@@ -65,13 +83,33 @@ class Deque {
 
   pop_back() {
     if (this.count > 0) {
-      const X = this.dequeue[this.backIdx];
-      this.back += 1;
+      const X = this.dequeue[this.tail];
+
+      this.tail -= 1;
       this.count -= 1;
+
+      this.tail = this.#adjust_index(this.tail);
+      this.#sync_index(this.tail);
 
       console.log(X);
     } else {
       console.log(-1);
+    }
+  }
+
+  #adjust_index(index) {
+    if (index < 0) {
+      index = this.max - 1;
+    } else if (index > this.max - 1) {
+      index = 0;
+    }
+    return index;
+  }
+
+  #sync_index(index) {
+    if (this.count == 1) {
+      this.head = index;
+      this.tail = index;
     }
   }
 
@@ -89,7 +127,7 @@ class Deque {
 
   front() {
     if (this.count > 0) {
-      console.log(this.dequeue[this.frontIdx]);
+      console.log(this.dequeue[this.head]);
     } else {
       console.log(-1);
     }
@@ -97,14 +135,10 @@ class Deque {
 
   back() {
     if (this.count > 0) {
-      console.log(this.dequeue[this.backIdx]);
+      console.log(this.dequeue[this.tail]);
     } else {
       console.log(-1);
     }
-  }
-
-  printDequeue() {
-    console.log(this.dequeue);
   }
 }
 
@@ -157,7 +191,7 @@ class Input {
         console.log("\n");
 
         solution(this);
-        process.exit();
+        // process.exit();
       });
   }
 
@@ -177,29 +211,9 @@ class Input {
       .map((number) => parseInt(number));
   }
 
-  /** @param {number} lineNumber */
-  readIntArrForLines(lineNumber) {
-    const lines = [...Array(lineNumber).keys()];
-    return lines.map(() => this.readIntArr());
-  }
-
   /** @returns {string} */
   readStr() {
     return this.#inputs.shift().trim();
-  }
-
-  /** @returns {Array<string>} */
-  readStrArr() {
-    return this.#inputs
-      .shift()
-      .split(" ")
-      .map((word) => word);
-  }
-
-  /** @param {number} lineNumber */
-  readStrArrForLines(lineNumber) {
-    const lines = [...Array(lineNumber).keys()];
-    return lines.map(() => this.readStrArr());
   }
 }
 

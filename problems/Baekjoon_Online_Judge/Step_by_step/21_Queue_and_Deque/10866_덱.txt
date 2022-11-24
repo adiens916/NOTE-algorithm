@@ -14,3 +14,13 @@ pop_back
 push_front 3
 empty
 front
+
+8
+push_front 1
+push_front 2
+push_front 3
+push_front 4
+pop_back
+pop_back
+pop_back
+pop_back
