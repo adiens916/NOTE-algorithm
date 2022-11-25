@@ -52,42 +52,19 @@ function solution(input) {
 }
 
 class Input {
-  // 기본값은 파일을 통해 입력받음. OJ 제출 시에는 false로 바꿔야 함!
   #inputByFile = true;
   // 입력 텍스트 파일 이름은 {현재 파일 이름}_input.txt 형식임
   #INPUT_FILE_SUFFIX = "_input.txt";
-  #inputFileName = "";
-  // process.stdin은 터미널 통해 입력하는 걸 의미
-  #inputStream = process.stdin;
   #inputs = [];
 
   constructor() {
-    if (this.#inputByFile) {
-      this.#makeInputFileName();
-      this.#setInputStreamAsFile();
-    }
     this.#run();
-  }
-
-  #makeInputFileName() {
-    const path = require("path");
-    // __filename은 special attribute 중 하나이며 전체 경로 포함.
-    // basename 결과는 파일명만 (+확장자 포함).
-    const fileName = path.basename(__filename);
-    const fileNameRoot = fileName.split(".")[0];
-    this.#inputFileName = `${fileNameRoot}${this.#INPUT_FILE_SUFFIX}`;
-  }
-
-  #setInputStreamAsFile() {
-    const fs = require("fs");
-    const fileStream = fs.createReadStream(this.#inputFileName);
-    this.#inputStream = fileStream;
   }
 
   #run() {
     const readline = require("readline");
     const reader = readline.createInterface({
-      input: this.#inputStream,
+      input: this.#getInputStream(),
       output: process.stdout,
     });
 
@@ -102,6 +79,31 @@ class Input {
         solution(this);
         process.exit();
       });
+  }
+
+  #getInputStream() {
+    if (this.#inputByFile) {
+      return this.#getInputStreamAsFile();
+    } else {
+      // process.stdin은 터미널 통해 입력하는 걸 의미
+      return process.stdin;
+    }
+  }
+
+  #getInputStreamAsFile() {
+    const fs = require("fs");
+    const inputFileName = this.#getInputFileName();
+    const fileStream = fs.createReadStream(inputFileName);
+    return fileStream;
+  }
+
+  #getInputFileName() {
+    const path = require("path");
+    // __filename은 special attribute 중 하나이며 전체 경로 포함.
+    // basename 결과는 파일명만 (+확장자 포함).
+    const fileName = path.basename(__filename);
+    const fileNameRoot = fileName.split(".")[0];
+    return `${fileNameRoot}${this.#INPUT_FILE_SUFFIX}`;
   }
 
   /** @returns {number} */
