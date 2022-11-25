@@ -1,25 +1,20 @@
-/**
- * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
- * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
- * 제출 시에는 solution 함수를 포함해서 맨 끝까지 복사해서 붙여넣어야 합니다.
- *
- * 입력 예시
- * - 한 줄에 있는 정수 한 개:
- * `const n = input.readInt();`
- *
- * - 한 줄에 있는 문자열 하나:
- * `const word = input.readStr();`
- */
-
 /** @param {Input} input */
 function solution(input) {
-  const n = input.readInt();
+  // 아래 있는 코드들은 전부 사용 예시입니다.
+  // 문제를 풀 때는 전부 지우시면 됩니다.
 
+  // 한 줄에 있는 정수 한 개
+  const n = input.readInt();
+  console.log("N: ", n);
+
+  // 한 줄에 있는 정수 여러 개
   const numbers = input
     .readStr()
     .split(" ")
     .map((str) => parseInt(str));
+  console.log("numbers: ", numbers);
 
+  // 여러 줄에 있는 정수 여러 개
   let arr = [];
   for (let i = 0; i < 4; i++) {
     const numbers = input
@@ -28,25 +23,44 @@ function solution(input) {
       .map((str) => parseInt(str));
     arr.push(numbers);
   }
-
-  console.log("N: ", n);
-  console.log("numbers: ", numbers);
   console.log("arr: ", arr);
 
+  // 한 줄에 있는 문자열 한 개
   const string = input.readStr();
+  // 한 줄에 있는 문자열 여러 개
   const words = input.readStr().split(" ");
+  console.log(string, "/", words);
 
+  // 여러 줄에 있는 문자열 여러 개
   let wordArr = [];
   for (let i = 0; i < 4; i++) {
     const words = input.readStr().split(" ");
     wordArr.push(words);
   }
-
-  console.log(string, "/", words);
   console.log(wordArr);
 }
 
 //////////////////////////////////////////////////
+/**
+ * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
+ * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
+ *
+ * 제출 시에는 맨 처음 solution 함수를 포함해서
+ * 맨 끝 new Input()까지 복사해서 붙여넣어야 합니다.
+ *
+ * 입력 예시
+ * - 한 줄에 있는 문자열 하나:
+ * `const word = input.readStr();`
+ *
+ * - 한 줄에 있는 문자열 여러 개:
+ * `const words = input.readStr().split(" ");`
+ *
+ * - 한 줄에 있는 정수 한 개:
+ * `const n = input.readInt();`
+ *
+ * - 한 줄에 있는 정수 여러 개:
+ * `const numbers = input.readStr().split(" ").map(x => parseInt(x));`
+ */
 
 // 파일 입력이 필요한 경우 true로 바꾸기
 const HAS_INPUT_FILE = false;
