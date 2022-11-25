@@ -42,7 +42,7 @@ function solution(input) {
   const words = input.readStr().split(" ");
 
   let wordArr = [];
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 4; i++) {
     const words = input.readStr().split(" ");
     wordArr.push(words);
   }
@@ -114,7 +114,17 @@ class Input {
 
   /** @returns {string} */
   readStr() {
-    return this.#inputs.shift().trim();
+    if (this.#inputs.length === 0) {
+      console.log("InputError: Not enough inputs");
+      return;
+    }
+
+    const str = this.#inputs.shift();
+    if (typeof str === "string") {
+      return str.trim();
+    } else {
+      console.log("InputError:", str, "is not a string");
+    }
   }
 }
 
