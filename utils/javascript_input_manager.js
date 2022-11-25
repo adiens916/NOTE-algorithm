@@ -9,20 +9,8 @@
  * - 한 줄에 있는 정수 한 개:
  * `const n = input.readInt();`
  *
- * - 한 줄에 있는 정수 여러 개 (공백으로 구분):
- * `const numbers = input.readIntArr();`
- *
- * - 여러 줄에 있는 정수 여러 개:
- * `const numberArr = input.readIntArrForLines(4);`
- *
  * - 한 줄에 있는 문자열 하나:
  * `const word = input.readStr();`
- *
- * - 한 줄에 있는 문자열 여러 개 (공백으로 구분):
- * `const words = input.readStr();`
- *
- * - 여러 줄에 있는 문자열 여러 개:
- * `const wordArr = input.readInt();`
  *
  * 주의: 답안 제출 시 출력 오류가 나는 경우,
  * 71번째의 빈 줄 추가하는 코드 제거하기.
@@ -31,15 +19,34 @@
 /** @param {Input} input */
 function solution(input) {
   const n = input.readInt();
-  const numbers = input.readIntArr();
-  const arr = input.readIntArrForLines(4);
+
+  const numbers = input
+    .readStr()
+    .split(" ")
+    .map((str) => parseInt(str));
+
+  let arr = [];
+  for (let i = 0; i < 4; i++) {
+    const numbers = input
+      .readStr()
+      .split(" ")
+      .map((str) => parseInt(str));
+    arr.push(numbers);
+  }
+
   console.log("N: ", n);
   console.log("numbers: ", numbers);
   console.log("arr: ", arr);
 
   const string = input.readStr();
-  const words = input.readStrArr();
-  const wordArr = input.readStrArrForLines(2);
+  const words = input.readStr().split(" ");
+
+  let wordArr = [];
+  for (let i = 0; i < 2; i++) {
+    const words = input.readStr().split(" ");
+    wordArr.push(words);
+  }
+
   console.log(string, "/", words);
   console.log(wordArr);
 }
@@ -105,37 +112,9 @@ class Input {
     return parseInt(this.#inputs.shift());
   }
 
-  /** @returns {Array<number>} */
-  readIntArr() {
-    return this.#inputs
-      .shift()
-      .split(" ")
-      .map((number) => parseInt(number));
-  }
-
-  /** @param {number} lineNumber */
-  readIntArrForLines(lineNumber) {
-    const lines = [...Array(lineNumber).keys()];
-    return lines.map(() => this.readIntArr());
-  }
-
   /** @returns {string} */
   readStr() {
     return this.#inputs.shift().trim();
-  }
-
-  /** @returns {Array<string>} */
-  readStrArr() {
-    return this.#inputs
-      .shift()
-      .split(" ")
-      .map((word) => word);
-  }
-
-  /** @param {number} lineNumber */
-  readStrArrForLines(lineNumber) {
-    const lines = [...Array(lineNumber).keys()];
-    return lines.map(() => this.readStrArr());
   }
 }
 
