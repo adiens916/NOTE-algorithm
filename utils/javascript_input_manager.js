@@ -108,22 +108,38 @@ class Input {
     this.#inputs.push(element);
   }
 
+  /** @returns {number} */
   readInt() {
-    return parseInt(this.#inputs.shift());
+    this.#checkHasInput();
+    const number = this.#checkTypeAndGet("number");
+    return Number(number);
   }
 
   /** @returns {string} */
   readStr() {
+    this.#checkHasInput();
+    const str = this.#checkTypeAndGet("string");
+    return str.trim();
+  }
+
+  #checkHasInput() {
     if (this.#inputs.length === 0) {
       console.log("InputError: Not enough inputs");
-      return;
     }
+  }
 
-    const str = this.#inputs.shift();
-    if (typeof str === "string") {
-      return str.trim();
+  /**
+   * @param {('string'|'number')} type
+   * @returns {string|number}
+   */
+  #checkTypeAndGet(type) {
+    const input = this.#inputs.shift();
+    if (typeof input === "string") {
+      return input;
+    } else if (typeof Number(input) === "number") {
+      return input;
     } else {
-      console.log("InputError:", str, "is not a string");
+      console.log("InputError:", input, "is not", type);
     }
   }
 }
