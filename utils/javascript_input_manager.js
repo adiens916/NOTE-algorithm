@@ -66,7 +66,7 @@ class Input {
       this.#makeInputFileName();
       this.#setInputStreamAsFile();
     }
-    this.#initReadline();
+    this.#run();
   }
 
   #makeInputFileName() {
@@ -84,7 +84,7 @@ class Input {
     this.#inputStream = fileStream;
   }
 
-  #initReadline() {
+  #run() {
     const readline = require("readline");
     const reader = readline.createInterface({
       input: this.#inputStream,
@@ -93,7 +93,7 @@ class Input {
 
     reader
       .on("line", (line) => {
-        this.#push(line);
+        this.#inputs.push(line);
       })
       .on("close", () => {
         // 입력과 출력 사이를 띄우기 위해 한 줄 추가
@@ -102,10 +102,6 @@ class Input {
         solution(this);
         process.exit();
       });
-  }
-
-  #push(element) {
-    this.#inputs.push(element);
   }
 
   /** @returns {number} */
