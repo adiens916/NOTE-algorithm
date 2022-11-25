@@ -1,3 +1,29 @@
+/**
+ * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
+ * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
+ *
+ * 제출 시에는 맨 처음 HAS_INPUT_FILE 변수를 포함해서,
+ * 맨 끝 new Input()까지 복사해서 붙여넣어야 합니다.
+ *
+ * 입력 예시
+ * - 한 줄에 있는 문자열 하나:
+ * `const word = input.readStr();`
+ *
+ * - 한 줄에 있는 문자열 여러 개:
+ * `const words = input.readStr().split(" ");`
+ *
+ * - 한 줄에 있는 정수 한 개:
+ * `const n = input.readInt();`
+ *
+ * - 한 줄에 있는 정수 여러 개:
+ * `const numbers = input.readStr().split(" ").map(x => parseInt(x));`
+ */
+
+// 파일 입력이 필요한 경우 true로 바꾸기
+const HAS_INPUT_FILE = false;
+// 입력 텍스트 파일 이름은 {현재 파일 이름}.txt 형식임
+const INPUT_FILE_SUFFIX = ".txt";
+
 /** @param {Input} input */
 function solution(input) {
   // 아래 있는 코드들은 전부 사용 예시입니다.
@@ -41,31 +67,6 @@ function solution(input) {
 }
 
 //////////////////////////////////////////////////
-/**
- * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
- * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
- *
- * 제출 시에는 맨 처음 solution 함수를 포함해서
- * 맨 끝 new Input()까지 복사해서 붙여넣어야 합니다.
- *
- * 입력 예시
- * - 한 줄에 있는 문자열 하나:
- * `const word = input.readStr();`
- *
- * - 한 줄에 있는 문자열 여러 개:
- * `const words = input.readStr().split(" ");`
- *
- * - 한 줄에 있는 정수 한 개:
- * `const n = input.readInt();`
- *
- * - 한 줄에 있는 정수 여러 개:
- * `const numbers = input.readStr().split(" ").map(x => parseInt(x));`
- */
-
-// 파일 입력이 필요한 경우 true로 바꾸기
-const HAS_INPUT_FILE = false;
-// 입력 텍스트 파일 이름은 {현재 파일 이름}.txt 형식임
-const INPUT_FILE_SUFFIX = ".txt";
 
 class Input {
   #inputs = [];
