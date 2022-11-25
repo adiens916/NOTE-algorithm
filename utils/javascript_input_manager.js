@@ -5,6 +5,8 @@
  * 제출 시에는 맨 처음 HAS_INPUT_FILE 변수를 포함해서,
  * 맨 끝 new Input()까지 복사해서 붙여넣어야 합니다.
  *
+ * 주의: 제출 시에는 HAS_INPUT_FILE을 false로 바꿔야 합니다.
+ *
  * 입력 예시
  * - 한 줄에 있는 문자열 하나:
  * `const word = input.readStr();`
@@ -19,9 +21,9 @@
  * `const numbers = input.readStr().split(" ").map(x => parseInt(x));`
  */
 
-// 파일 입력이 필요한 경우 true로 바꾸기
-const HAS_INPUT_FILE = false;
-// 입력 텍스트 파일 이름은 {현재 파일 이름}.txt 형식임
+/** 파일 입력이 필요한 경우 true로 바꾸기 */
+const HAS_INPUT_FILE = true;
+/** 입력 텍스트 파일 이름은 {현재 파일 이름}.txt 형식임 */
 const INPUT_FILE_SUFFIX = ".txt";
 
 /** @param {Input} input */
@@ -59,7 +61,7 @@ function solution(input) {
 
   // 여러 줄에 있는 문자열 여러 개
   let wordArr = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 2; i++) {
     const words = input.readStr().split(" ");
     wordArr.push(words);
   }
