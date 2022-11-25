@@ -1,8 +1,6 @@
 /**
  * 알고리즘 문제 풀이 때 JavaScript 입력을 도와주는 클래스입니다.
  * 아래 메서드들을 이용해서 텍스트 입력을 받을 수 있습니다.
- *
- * 기본적으로 {파일 이름}_input.txt에 적힌 입력들을 읽어옵니다.
  * 제출 시에는 solution 함수를 포함해서 맨 끝까지 복사해서 붙여넣어야 합니다.
  *
  * 입력 예시
@@ -11,9 +9,6 @@
  *
  * - 한 줄에 있는 문자열 하나:
  * `const word = input.readStr();`
- *
- * 주의: 답안 제출 시 출력 오류가 나는 경우,
- * 71번째의 빈 줄 추가하는 코드 제거하기.
  */
 
 /** @param {Input} input */
@@ -51,10 +46,14 @@ function solution(input) {
   console.log(wordArr);
 }
 
+//////////////////////////////////////////////////
+
+// 파일 입력이 필요한 경우 true로 바꾸기
+const HAS_INPUT_FILE = false;
+// 입력 텍스트 파일 이름은 {현재 파일 이름}.txt 형식임
+const INPUT_FILE_SUFFIX = ".txt";
+
 class Input {
-  #inputByFile = true;
-  // 입력 텍스트 파일 이름은 {현재 파일 이름}_input.txt 형식임
-  #INPUT_FILE_SUFFIX = "_input.txt";
   #inputs = [];
 
   constructor() {
@@ -73,8 +72,10 @@ class Input {
         this.#inputs.push(line);
       })
       .on("close", () => {
-        // 입력과 출력 사이를 띄우기 위해 한 줄 추가
-        console.log("");
+        if (HAS_INPUT_FILE) {
+          // 파일 입력 시, 입력과 출력 사이를 띄우기 위해 한 줄 추가
+          console.log("");
+        }
 
         solution(this);
         process.exit();
@@ -82,7 +83,7 @@ class Input {
   }
 
   #getInputStream() {
-    if (this.#inputByFile) {
+    if (HAS_INPUT_FILE) {
       return this.#getInputStreamAsFile();
     } else {
       // process.stdin은 터미널 통해 입력하는 걸 의미
@@ -103,7 +104,7 @@ class Input {
     // basename 결과는 파일명만 (+확장자 포함).
     const fileName = path.basename(__filename);
     const fileNameRoot = fileName.split(".")[0];
-    return `${fileNameRoot}${this.#INPUT_FILE_SUFFIX}`;
+    return `${fileNameRoot}${INPUT_FILE_SUFFIX}`;
   }
 
   /** @returns {number} */
