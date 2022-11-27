@@ -23,7 +23,7 @@ def find_max_length_when_N(cables: list[int], N: int) -> int:
     # FIX: 같은 것도 포함해야 함
     while min_range <= max_range:
         mid = (min_range + max_range) // 2
-        cut_count = count_cables_cut_by_length(cables, mid)
+        cut_count = sum([cable // mid for cable in cables])
 
         if cut_count < N:
             max_range = mid - 1
@@ -33,13 +33,6 @@ def find_max_length_when_N(cables: list[int], N: int) -> int:
                 max_length = mid
 
     return max_length
-
-
-def count_cables_cut_by_length(cables: list[int], cut_len: int) -> int:
-    count = 0
-    for cable in cables:
-        count += cable // cut_len
-    return count
 
 
 main()
