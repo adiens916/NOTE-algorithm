@@ -14,9 +14,11 @@ def main():
 
 
 def find_max_length_when_N(cables: list[int], N: int) -> int:
-    max_length = 0
+    # FIX: 최대 범위는, 가장 긴 케이블 기준으로 잘라야 함.
+    # 모든 케이블을 사용하라는 조건은 없으므로...
     min_range = 1
-    max_range = min(cables)
+    max_range = max(cables)
+    max_length = 0
 
     # FIX: 같은 것도 포함해야 함
     while min_range <= max_range:
