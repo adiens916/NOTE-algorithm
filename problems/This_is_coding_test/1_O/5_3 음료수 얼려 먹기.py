@@ -26,13 +26,26 @@ def check_visited(y: int, x: int, graph: list[list[str]]) -> None:
                 queue.append((y + dy, x + dx))
 
 
+def check_visited_dfs(y: int, x: int, graph: list[list[str]]) -> None:
+    # DFS
+    if graph[y][x] == "1":
+        return
+    graph[y][x] = "1"
+
+    for move in move_types:
+        dy = move[0]
+        dx = move[1]
+        if 0 <= y + dy < N and 0 <= x + dx < M:
+            check_visited(y + dy, x + dx, graph)
+
+
 count = 0
 
 for y in range(N):
     for x in range(M):
         if ice_map[y][x] == "0":
             count += 1
-            check_visited(y, x, ice_map)
+            check_visited_dfs(y, x, ice_map)
 
 print(count)
 
