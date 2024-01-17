@@ -15,7 +15,7 @@ def quick_sort(arr: list[int], start: int, end: int) -> None:
         while right > start and arr[right] >= arr[pivot]:
             right -= 1
 
-        if left <= right:
+        if left < right:  # XXX: 서로 같아질 일은 절대로 없음. 부등호로 충분함.
             arr[left], arr[right] = arr[right], arr[left]
         else:
             arr[pivot], arr[right] = arr[right], arr[pivot]
