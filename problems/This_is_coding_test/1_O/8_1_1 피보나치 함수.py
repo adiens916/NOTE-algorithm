@@ -9,4 +9,4 @@ def fibonacci(n: int, level: int) -> int:
     return fibonacci(n - 1, level + 1) + fibonacci(n - 2, level + 1)
 
 
-fibonacci(6, 0)
+fibonacci(20, 0)
