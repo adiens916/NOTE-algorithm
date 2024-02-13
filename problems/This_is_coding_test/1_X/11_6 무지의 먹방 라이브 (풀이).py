@@ -12,6 +12,9 @@ def solution(food_times: list[int], k: int) -> int:
 
     prev_time = 0
     while any(queue):
+        # XXX: 다른 사람들 풀이 보니까, 굳이 우선순위 큐를 쓸 필요가 없네?...
+        # 우선순위 큐는 작은 게 '중간에' 새로 들어오는 경우 유용한데,
+        # 지금 같은 경우는 무조건 증가하는 방식이니까, 다음 걸 참조하면 됨...
         time, pos = queue[0]
         # 작은 것 기준으로 전체 시간을 계산
         expected_time = (time - prev_time) * len(queue)
