@@ -1,10 +1,3 @@
-# XXX: left, right 안 쓰고 stack만 가지고도 올바름 판별 가능
-# left면 stack ++, right면 stack --
-# stack이 음수가 된 적이 한 번이라도 있으면 매칭 X
-# stack이 0이 되면 좌우 개수 같음
-# 참고: https://school.programmers.co.kr/learn/courses/30/lessons/60058/solution_groups?language=python3
-
-
 def solution(p: str) -> str:
     answer = fix(p)
     return answer
