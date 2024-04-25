@@ -2,44 +2,54 @@ from collections import deque
 
 WALL = 1
 BLANK = 0
-H = 1
-V = 0
 
 dy = (1, -1, 0, 0)
 dx = (0, 0, 1, -1)
 
-visited_h = [[False] * N for _ in range(N)]
-visited_v = [[False] * N for _ in range(N)]
-
 
 def solution(board):
-    answer = 0
+    answer = bfs(board)
     return answer
 
 
-def bfs(N: int):
-    start = ((0, 0), (0, 1), H)
-    queue = deque([start])
+def bfs(board: list) -> int:
+    N = len(board)
 
-    visited_h[0][0] = True
-    visited_h[0][1] = True
+    start = {(0, 0), (0, 1)}
+    count = 0
+    queue = deque([(start, count)])
+
+    visited = set()
+    visited.add(start)
 
     while queue:
-        tail, head, d = queue.popleft()
+        pos_set, count = queue.popleft()
+        pos1, pos2 = list(pos_set)
+        pos1_y, pos1_x = pos1
+        pos2_y, pos2_x = pos2
 
-        for i in range(4):
-            n_tail, n_head = move(tail, head, i)
-
-            if not is_in_board(tail, head, N):
+        for pos_set_r in rotate(pos_set, board):
+            if pos_set_r in visited:
                 continue
 
-            if is_visited(tail, head, d):
-                continue
+            for pos_set_m in move(pos_set_r, board):
+                if pos_set_m in visited:
+                    continue
 
-            visit(tail, head, d)
+                if not is_in_goal(pos_set_m, N):
+                    visited.add(pos_set_m)
+                    queue.append((pos_set_m, count + 1))
+                else:
+                    return count
+
+
+def rotate(pos_set: set, board: list) -> list:
+
 
 
 def move(tail: tuple, head: tuple, i: int) -> tuple:
+    for i in range(4):
+        n_tail, n_head = move(tail, head, i)
     n_tail_y = tail[0] + dy[i]
     n_tail_x = tail[1] + dx[i]
     n_head_y = head[0] + dy[i]
@@ -47,26 +57,11 @@ def move(tail: tuple, head: tuple, i: int) -> tuple:
     return (n_tail_y, n_tail_x), (n_head_y, n_head_x)
 
 
-def is_in_board(tail: tuple, head: tuple, N: int) -> bool:
-    a = 0 <= tail[0] < N and 0 <= tail[1] < N
-    b = 0 <= head[0] < N and 0 <= head[1] < N
-    return a and b
+def is_in_goal(pos_set: set, n: int) -> bool:
+    pos1, pos2 = list(pos_set)
+    pos1_y, pos1_x = pos1
+    pos2_y, pos2_x = pos2
 
-
-def is_visited(tail: tuple, head: tuple, d: int) -> bool:
-    if d == H:
-        v1 = visited_h[tail[0]][tail[1]]
-        v2 = visited_h[head[0]][head[1]]
-    else:
-        v1 = visited_v[tail[0]][tail[1]]
-        v2 = visited_v[head[0]][head[1]]
-    return v1 and v2
-
-
-def visit(tail, head, d) -> None:
-    if d == H:
-        visited_h[tail[0]][tail[1]] = True
-        visited_h[head[0]][head[1]] = True
-    else:
-        visited_v[tail[0]][tail[1]] = True
-        visited_v[head[0]][head[1]] = True
+    a = pos1_y == n - 1 and pos1_x == n - 1
+    b = pos2_y == n - 1 and pos2_x == n - 1
+    return a or b
