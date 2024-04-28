@@ -8,14 +8,24 @@ dx = (0, 0, 1, -1)
 
 
 def solution(board):
+    surround(board)
     answer = bfs(board)
     return answer
 
 
-def bfs(board: list) -> int:
+def surround(board: list) -> None:
     N = len(board)
+    board.insert(0, [WALL] * N)
+    board.append([WALL] * N)
+    for line in board:
+        line.insert(0, WALL)
+        line.append(WALL)
 
-    start = {(0, 0), (0, 1)}
+
+def bfs(board: list) -> int:
+    n = len(board) - 2
+
+    start = ((1, 1), (1, 2))
     count = 0
     queue = deque([(start, count)])
 
@@ -23,45 +33,103 @@ def bfs(board: list) -> int:
     visited.add(start)
 
     while queue:
-        pos_set, count = queue.popleft()
-        pos1, pos2 = list(pos_set)
-        pos1_y, pos1_x = pos1
-        pos2_y, pos2_x = pos2
+        pos_list, count = queue.popleft()
 
-        for pos_set_r in rotate(pos_set, board):
-            if pos_set_r in visited:
+        # 회전하는 경우 체크
+        for pos_list_r in rotate(pos_list, board):
+            if pos_list_r in visited:
                 continue
 
-            for pos_set_m in move(pos_set_r, board):
-                if pos_set_m in visited:
-                    continue
+            if not is_in_goal(pos_list_r, n):
+                visited.add(pos_list_r)
+                queue.append((pos_list_r, count + 1))
+            else:
+                return count + 1
 
-                if not is_in_goal(pos_set_m, N):
-                    visited.add(pos_set_m)
-                    queue.append((pos_set_m, count + 1))
-                else:
-                    return count
+        # 이동하는 경우 체크
+        for pos_list_m in move(pos_list, board):
+            if pos_list_m in visited:
+                continue
 
-
-def rotate(pos_set: set, board: list) -> list:
-
-
-
-def move(tail: tuple, head: tuple, i: int) -> tuple:
-    for i in range(4):
-        n_tail, n_head = move(tail, head, i)
-    n_tail_y = tail[0] + dy[i]
-    n_tail_x = tail[1] + dx[i]
-    n_head_y = head[0] + dy[i]
-    n_head_x = head[1] + dx[i]
-    return (n_tail_y, n_tail_x), (n_head_y, n_head_x)
+            if not is_in_goal(pos_list_m, n):
+                visited.add(pos_list_m)
+                queue.append((pos_list_m, count + 1))
+            else:
+                return count + 1
 
 
-def is_in_goal(pos_set: set, n: int) -> bool:
-    pos1, pos2 = list(pos_set)
+def rotate(pos_list: tuple, board: list) -> list:
+    result = []
+
+    pos1, pos2 = pos_list
     pos1_y, pos1_x = pos1
     pos2_y, pos2_x = pos2
 
-    a = pos1_y == n - 1 and pos1_x == n - 1
-    b = pos2_y == n - 1 and pos2_x == n - 1
+    # 가로인 경우
+    if pos1_y == pos2_y:
+        # 위에 벽 없으면 회전
+        if board[pos1_y - 1][pos1_x] == BLANK and board[pos2_y - 1][pos2_x] == BLANK:
+            a = ((pos1_y - 1, pos1_x), (pos1_y, pos1_x))
+            b = ((pos2_y - 1, pos2_x), (pos2_y, pos2_x))
+            result.append(a)
+            result.append(b)
+
+        # 아래에 벽 없으면 회전
+        if board[pos1_y + 1][pos1_x] == BLANK and board[pos2_y + 1][pos2_x] == BLANK:
+            a = ((pos1_y, pos1_x), (pos1_y + 1, pos1_x))
+            b = ((pos2_y, pos2_x), (pos2_y + 1, pos2_x))
+            result.append(a)
+            result.append(b)
+
+    # 세로인 경우
+    else:
+        # 오른쪽 벽 없으면 회전
+        if board[pos1_y][pos1_x + 1] == BLANK and board[pos2_y][pos2_x + 1] == BLANK:
+            a = ((pos1_y, pos1_x), (pos1_y, pos1_x + 1))
+            b = ((pos2_y, pos2_x), (pos2_y, pos2_x + 1))
+            result.append(a)
+            result.append(b)
+
+        # 왼쪽에 벽 없으면 회전
+        if board[pos1_y][pos1_x - 1] == BLANK and board[pos2_y][pos2_x - 1] == BLANK:
+            a = ((pos1_y, pos1_x - 1), (pos1_y, pos1_x))
+            b = ((pos2_y, pos2_x - 1), (pos2_y, pos2_x))
+            result.append(a)
+            result.append(b)
+
+    return result
+
+
+def move(pos_list: tuple, board: list) -> list:
+    result = []
+
+    pos1, pos2 = sorted(pos_list)
+    pos1_y, pos1_x = pos1
+    pos2_y, pos2_x = pos2
+
+    for i in range(4):
+        n_pos1_y = pos1_y + dy[i]
+        n_pos1_x = pos1_x + dx[i]
+        n_pos2_y = pos2_y + dy[i]
+        n_pos2_x = pos2_x + dx[i]
+
+        if board[n_pos1_y][n_pos1_x] == BLANK and board[n_pos2_y][n_pos2_x] == BLANK:
+            pos_list = ((n_pos1_y, n_pos1_x), (n_pos2_y, n_pos2_x))
+            result.append(pos_list)
+
+    return result
+
+
+def is_in_goal(pos_list: set, n: int) -> bool:
+    pos1, pos2 = pos_list
+    pos1_y, pos1_x = pos1
+    pos2_y, pos2_x = pos2
+
+    a = pos1_y == n and pos1_x == n
+    b = pos2_y == n and pos2_x == n
     return a or b
+
+
+board = [[0, 0, 0, 1, 1],[0, 0, 0, 1, 0],[0, 1, 0, 1, 1],[1, 1, 0, 0, 1],[0, 0, 0, 0, 0]]
+print(solution(board))
+# 7
