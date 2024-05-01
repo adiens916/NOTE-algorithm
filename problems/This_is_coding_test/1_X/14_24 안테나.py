@@ -2,16 +2,11 @@ N = int(input())
 nums = list(map(int, input().split()))
 nums.sort()
 
-avg = sum(nums) / len(nums)
-
-median = 100001
-for num in nums:
-    if abs(num - avg) < abs(median - avg):
-        median = num
-    else:
-        break
+# XXX: 결국 거리 합을 최소로 만드는 곳은, 정렬 했을 때 중앙에 있는 곳임.
+median = nums[(N - 1) // 2]
 
 print(median)
+
 """
 4
 5 1 7 9
