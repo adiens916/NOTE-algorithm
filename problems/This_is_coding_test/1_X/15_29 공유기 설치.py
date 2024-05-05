@@ -1,3 +1,4 @@
+# 참고: https://my-coding-notes.tistory.com/119
 """
 XXX: 이진탐색에서 매 시행마다 N개씩 순회하면 NlogN
 
@@ -8,6 +9,8 @@ XXX: 이진탐색에서 매 시행마다 N개씩 순회하면 NlogN
 그 매 시행마다 N개씩 전부 찾는다고 하면,
 결국 NlogN이 소모된다.
 """
+import sys
+input = sys.stdin.readline
 
 
 def main():
@@ -38,14 +41,10 @@ def binary_search(n: int, c: int, points: list[int]) -> int:
         # 설치 장소가 원하는 개수보다 적으면, 간격 줄여서 설치하기
         if count < c:
             max_dist = dist - 1
-        # 원하는 개수보다 많으면, 간격 늘리기
-        elif count > c:
-            min_dist = dist + 1
-        # 개수 같은 경우
-        else:
-            # XXX: 그냥 거리보다 먼 지점에 설치한 거고, 실제 지점 간의 거리와는 다를 수 있음.
-            # 예: 1, 4는 거리가 2보다 멀어서 설치했지만, 실제로는 거리가 3 차이남.
-            # => 개수 만족하는 한, 거리를 조금씩 더 늘리기
+        # 원하는 개수보다 많거나 같은 경우, 간격 늘리기
+        # XXX: 많을 때도 갱신해야 함. 왜냐하면 많이 나오면, 그 중에서 c개 골라서 설치해도 조건을 만족하기 때문.
+        # 예) 0, 25, 50, 75, 100일 때, 25 간격은 5개가 나오지만, 그 중 아무 4곳 설치하면 조건에 맞음.
+        elif count >= c:
             min_dist = dist + 1
             optimal = dist
 
@@ -78,3 +77,11 @@ main()
 4
 9
 """  # 3
+"""
+5 4
+0
+25
+50
+75
+100
+"""  # 25
