@@ -14,7 +14,8 @@ for anchor in range(n):
             # => 항상 최댓값으로 갱신되도록, max 함수로 비교하기
             max_lengths[anchor] = max(max_lengths[anchor], max_lengths[prev] + 1)
 
-print(n - max_lengths[n - 1])
+# XXX: 최댓값이 중간에 나올 수도 있으므로, 끝 지점을 출력하면 안됨
+print(n - max(max_lengths))
 
 """
 7
@@ -24,7 +25,6 @@ print(n - max_lengths[n - 1])
 11
 100 7 6 5 4 3 10 9 8 2 1
 """  # 3 => 뒤쪽의 10 9 8을 빼는 게 이득
-
 """
 8
 100 4 3 10 9 8 2 1
