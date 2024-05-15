@@ -10,7 +10,7 @@ for _ in range(m):
 
 # 시작 도시랑 도착 도시가 같은 경우는 없음
 for i in range(1, n + 1):
-    graph[n][n] = 0
+    graph[i][i] = 0
 
 # Floyd-Warshall Alg.
 for k in range(1, n + 1):
