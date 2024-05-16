@@ -23,7 +23,13 @@ def shortest_path(n: int, area: list[list[int]]) -> int:
     # Init priority queue
     queue = [(area[0][0], 0, 0)]
     while queue:
-        total_cost, row, col = heapq.heappop(queue)
+        cur_cost, row, col = heapq.heappop(queue)
+
+        # Check visit
+        # Because a shorter one might have been found in early steps
+        prev_cost = shortest_nodes[row][col]
+        if prev_cost < cur_cost:
+            continue
 
         for i in range(4):
             y = row + dy[i]
@@ -33,16 +39,11 @@ def shortest_path(n: int, area: list[list[int]]) -> int:
             if not (0 <= y < n and 0 <= x < n):
                 continue
 
-            # Check visit
-            length = shortest_nodes[y][x]
-            if length < total_cost:
-                continue
-
-            # Check length
-            this_cost = shortest_nodes[row][col] + area[y][x]
-            if this_cost < shortest_nodes[y][x]:
-                shortest_nodes[y][x] = this_cost
-                heapq.heappush(queue, (this_cost, y, x))
+            # Compare distance
+            new_cost = shortest_nodes[row][col] + area[y][x]
+            if new_cost < shortest_nodes[y][x]:
+                shortest_nodes[y][x] = new_cost
+                heapq.heappush(queue, (new_cost, y, x))
 
     return shortest_nodes[n - 1][n - 1]
 
