@@ -4,111 +4,86 @@ DFS 방식을 쓰되, 현재 맵 상태도 같이 넘겨야 함.
 이때 최대 경우의 수 = 16 + 15 * 3^1 + 14 * 3^2 + 13 * 3^3 +
 3^15가 대략 천만
 """
+from copy import deepcopy
 
-arrows = [
-    (0, 0),
-    (-1, 0), (-1, -1), (0, -1),
-    (1, -1), (1, 0), (1, 1),
-    (0, 1), (-1, 1)
-]
+
 SHARK = 99
+dy = (0, -1, -1, 0, 1, 1, 1, 0, -1)
+dx = (0, 0, -1, -1, -1, 0, 1, 1, 1)
 
 
 def main():
-    fish_arr, dir_arr = input_fish()
-    fish_order = get_fish_order(fish_arr)
-
-    eaten_sum = 0
-    shark_pos = (0, 0)
-    eaten_fish_num = fish_arr[0][0]
-    fish_order[eaten_fish_num] = (-1, -1)
-    eaten_sum += eaten_fish_num
-    shark_dir = dir_arr[0][0]
-    fish_arr[0][0] = SHARK
-
-    fish_arr_list = [(fish_arr, dir_arr)]
-    for fish_arr, dir_arr in fish_arr_list:
-        fish_order = get_fish_order(fish_arr)
-        move_fish(fish_arr, dir_arr, fish_order)
-        fish_arr_cand = move_shark(fish_arr, dir_arr, fish_order, shark_pos, shark_dir, eaten_sum)
-        if not any(fish_arr_cand):
-            print(eaten_sum)
-            break
-        else:
-            fish_arr_list.extend(fish_arr_cand)
-
-
-def input_fish():
-    fish_arr = [[0] * 4 for _ in range(4)]
-    dir_arr = [[0] * 4 for _ in range(4)]
-
+    fish_arr = [[[0, 0] for x in range(4)] for y in range(4)]
     for row in range(4):
         line = list(map(int, input().split()))
-        for col in range(8):
-            if col % 2 == 0:
-                fish_arr[row][col // 2] = line[col]
-            else:
-                dir_arr[row][col // 2] = line[col]
+        for i in range(8):
+            fish = line[i // 2]
+            way = line[i // 2 + 1]
+            fish_arr[row][i // 2] = [fish, way]
 
-    return fish_arr, dir_arr
+    shark_way = fish_arr[0][0][1]
+    eat = 0
+    shark = ([0, 0], shark_way, eat)
+    fish_arr[0][0] = [SHARK, 0]
+
+    eaten_num = dfs(fish_arr, shark)
+    print(eaten_num)
 
 
-def get_fish_order(fish_arr: list[list[int]]) -> list[tuple[int, int]]:
-    fish_order = [(-1, -1) for _ in range(17)]
+def dfs(fish_arr: list[list[list[int]]], shark: tuple[list[int], int, int]) -> int:
+    new_fish_arr = move_fish(fish_arr)
 
+    pos, way, eat = shark
+    for i in range(4):
+        y = pos[0] + dy[way]
+        x = pos[1] + dx[way]
+
+        if not (0 <= y < 4 and 0 <= x < 4):
+            continue
+        if new_fish_arr[y][x][0] == 0:
+            continue
+        fish_arr_copy = deepcopy(new_fish_arr)
+
+
+def move_fish(fish_arr):
+    fish_order = get_fish_order(fish_arr)
+    for i in range(1, 17):
+        row, col = fish_order[i]
+        fish, way = fish_arr[row][col]
+
+        y, x = get_next_pos_of_fish(fish_arr, row, col, way)
+        n_fish, n_way = fish_arr[y][x]
+        if n_fish != 0:
+            fish_arr[row][col] = [n_fish, n_way]
+        fish_arr[y][x] = [fish, way]
+    return fish_arr
+
+
+def get_fish_order(fish_arr):
+    fish_order = [(0, 0) for _ in range(17)]
     for row in range(4):
         for col in range(4):
-            fish_num = fish_arr[row][col]
-            fish_order[fish_num] = (row, col)
-
+            fish, way = fish_arr[row][col]
+            if fish == SHARK:
+                continue
+            fish_order[fish] = (row, col)
     return fish_order
 
 
-def move_fish(fish_arr, dir_arr, fish_order):
-    for i in range(1, 17):
-        row, col = fish_order[i]
-        if row == -1:
-            continue
-
-        di = dir_arr[row][col]
-        n_row, n_col = get_next_pos_of_fish(fish_arr, row, col, di)
-
-        n_fish = fish_arr[n_row][n_col]
-        if n_fish > 0:
-            n_di = dir_arr[n_row][n_col]
-            fish_arr[row][col] = n_fish
-            dir_arr[row][col] = n_di
-        fish_arr[n_row][n_col] = i
-        dir_arr[n_row][n_col] = di
-
-
-def get_next_pos_of_fish(fish_arr, row, col, di):
+def get_next_pos_of_fish(fish_arr, row, col, way):
     for i in range(8):
-        di = (di + i) % 9
-        if di == 0:
-            di = 1
+        n_way = way + i
+        if n_way == 9:
+            n_way = 1
 
-        n_row = row + arrows[di][0]
-        n_col = col + arrows[di][1]
+        y = row + dy[n_way]
+        x = col + dx[n_way]
 
-        if not (0 <= n_row < 4 and 0 <= n_col < 4):
+        if not (0 <= y < 4 and 0 <= x < 4):
             continue
-        if fish_arr[n_row][n_col] == SHARK:
+        if fish_arr[y][x] == SHARK:
             continue
-        return n_row, n_col
-
-
-def move_shark(fish_arr, dir_arr, fish_order, shark_pos, shark_dir):
-    row, col = shark_pos
-    for i in range(3):
-        n_row = row + arrows[shark_dir][0]
-        n_col = col + arrows[shark_dir][1]
-
-        if not (0 <= n_row < 4 and 0 <= n_col < 4):
-            continue
-        if fish_arr[n_row][n_col] == 0:
-            continue
-
+        return y, x
 
 
 main()
