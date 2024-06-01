@@ -24,24 +24,82 @@ dx = (0, 0, -1, 1)
 def main():
     n, m, k = map(int, input().split())
 
-    arr = [list(map(int, input().split())) for _ in range(n)]
+    arr = [(0, 0) for x in range(n) for y in range(n)]
     sharks = [(-1, -1) for _ in range(m + 1)]
     for row in range(n):
+        line = list(map(int, input().split()))
         for col in range(n):
-            if arr[row][col] > 0:
-                shark = arr[row][col]
-                sharks[shark] = (row, col)
+            shark_num = line[col]
+            if shark_num > 0:
+                arr[row][col] = (shark_num, k)
+                sharks[shark_num] = (row, col)
 
-    shark_ways = list(map(int, input().split()))
-    shark_ways.insert(0, 0)
+    ways = list(map(int, input().split()))
+    ways.insert(0, 0)
 
-    shark_ps = [[(), (), (), ()] for _ in range(m + 1)]
+    next_ways = [[(), (), (), ()] for _ in range(m + 1)]
     for i in range(1, m + 1):
         p = [tuple(map(int, input().split())) for _ in range(4)]
-        shark_ps[i] = p
+        next_ways[i] = p
+
+    t = 0
+    while t < 1000:
+        remains = move_all_sharks(arr, sharks, ways, next_ways, n, k)
+        if remains == 1:
+            break
+    if t < 1000:
+        print(t)
+    else:
+        print(-1)
 
 
-    move_shark()
+def move_all_sharks(arr, sharks, ways, next_ways, n, k) -> int:
+    for row, col in sharks:
+        if row == -1:
+            continue
+        pass
+        # move_shark()
+
+
+def move_shark(shark, arr, sharks, ways, next_ways, n, k):
+    row, col = sharks[shark]
+    way = ways[shark]
+
+    for w in next_ways[shark][way - 1]:
+        y = row + dy[w - 1]
+        x = col + dx[w - 1]
+
+        if not (0 <= y < n and 0 <= x < n):
+            continue
+        num = arr[y][x][0]
+        odor = arr[y][x][1]
+        if num == 0:
+            occupy(shark, y, x, w, arr, sharks, ways, k)
+            return 0
+        if num < shark and odor == k + 1:
+            escape(shark, sharks)
+            return -1
+
+    for w in next_ways[shark][way - 1]:
+        y = row + dy[w - 1]
+        x = col + dx[w - 1]
+
+        if not (0 <= y < n and 0 <= x < n):
+            continue
+        if arr[y][x][0] == shark:
+            occupy(shark, y, x, w, arr, sharks, ways, k)
+            return 0
+
+
+def occupy(shark, row, col, way, arr, sharks, ways, k):
+    arr[row][col][0] = shark
+    arr[row][col][1] = k
+    sharks[shark] = (row, col)
+    ways[shark] = way
+
+
+def escape(shark, sharks):
+    sharks[shark] = (-1, -1)
 
 
 main()
