@@ -7,18 +7,20 @@ for _ in range(E):
     graph[b].append(a)
 
 visited = [False] * (V + 1)
+# 0. 시작 지점 방문 처리
+visited[1] = True
 
 
 def dfs(start: int):
-    # 1. 방문 처리
-    visited[start] = True
+    # 1. 할 일 하기
     print(start)
 
-    # 2. 인접 노드 확인
     for v in graph[start]:
-        # 3. 방문하지 않았으면 DFS
+        # 2. 주변 탐색
         if visited[v]:
             continue
+        # 3. 방문하지 않았으면 (즉, 처음 보는 거면) 체크
+        visited[v] = True
         dfs(v)
 
 
