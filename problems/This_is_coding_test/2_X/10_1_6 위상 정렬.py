@@ -7,13 +7,11 @@ def topology_sort(graph: list[list[int]]) -> list[int]:
     for v in range(N):
         for next_ in graph[v]:
             in_degrees[next_] += 1
-    visited = [False] * N
 
     queue = deque([])
     for v in range(1, N):
         if in_degrees[v] == 0:
             queue.append(v)
-            visited[v] = True
 
     result = []
     while queue:
@@ -21,15 +19,13 @@ def topology_sort(graph: list[list[int]]) -> list[int]:
         result.append(v)
 
         for next_ in graph[v]:
-            # XXX: visited 대신에 in_degree로 하는 게 깔끔함
-            # in_degree가 0이면 넘어가는 식
-            if visited[next_]:
-                continue
-
+            # XXX: visited 대신에 in_degree로 하는 게 더 깔끔함
+            # 어차피 비교 연산이나 빼기 연산이나 비슷함
             in_degrees[next_] -= 1
+
+            # in_degree가 0이 됐을 때'만' 넣으면 됨.
             if in_degrees[next_] == 0:
                 queue.append(next_)
-                visited[next_] = True
 
     return result
 
@@ -53,4 +49,4 @@ print(result)
 4 7
 5 6
 6 4
-"""
+"""  # 1 2 5 3 6 4 7
