@@ -1,30 +1,38 @@
-from collections import deque
+INF = int(1e9)
+
+
+def get_common_time_and_count(food_times: list[int]):
+    count = 0
+    common_time = INF
+    for t in food_times:
+        if t > 0:
+            count += 1
+            # XXX: 무조건 최솟값으로 갱신
+            common_time = min(t, common_time)
+    return common_time, count
 
 
 def solution(food_times, k):
-    arr = [(food_times[i], i) for i in range(len(food_times))]
-    arr = deque(sorted(arr))
-
     while k > 0:
-        common_time = arr[0][0]
-        count = len(arr)
+        common_time, count = get_common_time_and_count(food_times)
         consumed = common_time * count
 
-        if consumed >= k :
-            pos = consumed % k
-            return pos + 1
+        if consumed >= k:
+            # XXX: 남은 시간 % 남은 개수만큼 나누기
+            pos = k % count
+            for i in range(len(food_times)):
+                if food_times[i] == 0:
+                    continue
+                pos -= 1
+                if pos <= 0:
+                    return i + 1
 
-        count = 0
-        for i in range(len(arr)):
-            remains = arr[i][0] - common_time
-            if remains == 0:
-                count += 1
-            else:
-                arr[i] = (remains, arr[i][1])
-        for _ in range(count):
-            arr.popleft()
-
-        k -= consumed
+        else:
+            # 시간 줄이기
+            for i in range(len(food_times)):
+                if food_times[i] > 0:
+                    food_times[i] -= common_time
+            k -= consumed
 
 
 food_times = list(map(int, input().split()))
@@ -42,4 +50,4 @@ print(solution(food_times, k))
 """
 3 5 1
 5
-"""
+"""  # 1
