@@ -4,18 +4,23 @@
 
 def solution(s):
     cur_total_count = 1000
-    for length in range(1, len(s) // 2 + 1):
+
+    # XXX: 최대 범위는 절반까지
+    mid = len(s) // 2
+    for length in range(1, mid + 1):
         total_count = 0
         start = 0
         count = 1
 
         while start < len(s):
+            # XXX: Python은 범위에 관대하니, 다른 걸로 풀기
             prev = s[start : start + length]
             nxt = s[start + length : start + length * 2]
 
             if prev == nxt:
                 count += 1
             else:
+                # XXX: 뒤에 오는 if문의 범위는 ()로 묶어야 함.
                 total_count += len(prev) + (len(str(count)) if count > 1 else 0)
                 count = 1
                 prev = nxt
