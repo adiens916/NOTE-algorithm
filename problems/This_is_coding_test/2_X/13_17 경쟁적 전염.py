@@ -15,7 +15,8 @@ viruses = []
 for r in range(N):
     for c in range(N):
         if arr[r][c] != 0:
-            viruses.append((arr[r][c], r, c))
+            # XXX: 시간도 넣기
+            viruses.append((arr[r][c], r, c, 0))
 viruses.sort()
 
 
@@ -25,8 +26,12 @@ def bfs():
 
     queue = deque(viruses)
 
-    for _ in range(S):
-        virus, r, c = queue.popleft()
+    while queue:
+        virus, r, c, t = queue.popleft()
+
+        # XXX: S초가 되었을 때 종료
+        if t == S:
+            break
 
         for i in range(4):
             y = r + dy[i]
@@ -37,7 +42,8 @@ def bfs():
 
             if arr[y][x] == 0:
                 arr[y][x] = virus
-                queue.append((virus, y, x))
+                # XXX: 시간 1 증가시켜서 넣기
+                queue.append((virus, y, x, t + 1))
 
 
 bfs()
