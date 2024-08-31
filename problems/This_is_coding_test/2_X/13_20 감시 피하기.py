@@ -23,9 +23,12 @@ def watch():
 
     for (r, c) in teachers:
         for i in range(4):
+            # XXX: 기존 좌표 값을 보존해야 함
+            y = r
+            x = c
             while True:
-                y = r + dy[i]
-                x = c + dx[i]
+                y += dy[i]
+                x += dx[i]
 
                 if not (0 <= y < N and 0 <= x < N):
                     break
@@ -33,9 +36,6 @@ def watch():
                     break
                 if arr[y][x] == "S":
                     return False
-
-                r = y
-                c = x
 
     return True
 
@@ -63,6 +63,7 @@ def combination(built):
             checked[i] = False
 
 
+combination(0)
 if is_available:
     print("YES")
 else:
