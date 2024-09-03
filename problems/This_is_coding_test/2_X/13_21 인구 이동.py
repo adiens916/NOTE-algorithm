@@ -8,24 +8,13 @@
 같은 날 중엔 이미 체크한 곳은 지나가야 함
 """
 
+from collections import deque
+
 N, L, R = map(int, input().split())
 arr = [list(map(int, input().split())) for _ in range(N)]
 
 dy = (-1, 0, 1, 0)
 dx = (0, -1, 0, 1)
-
-# 미리 이웃이 될 수 있는 좌표들 저장 (1200ms 감소)
-neighbors = {}
-for r in range(N):
-    for c in range(N):
-        temp = []
-        for i in range(4):
-            y = r + dy[i]
-            x = c + dx[i]
-
-            if 0 <= y < N and 0 <= x < N:
-                temp.append((y, x))
-        neighbors[(r, c)] = temp
 
 
 def bfs(r, c, visited):
@@ -33,14 +22,17 @@ def bfs(r, c, visited):
     union_sum = arr[r][c]
 
     visited[r][c] = True
-    # deque 대신에 인덱스 활용 (500ms 감소)
-    queue = [(r, c)]
-    q_len = 1
-    pivot = 0
-    while pivot < q_len:
-        r, c = queue[pivot]
+    queue = deque([(r, c)])
+    while queue:
+        r, c = queue.popleft()
 
-        for y, x in neighbors[(r, c)]:
+        for i in range(4):
+            y = r + dy[i]
+            x = c + dx[i]
+
+            if not (0 <= y < N and 0 <= x < N):
+                continue
+
             # XXX: 방문 여부보다 연결이 가능한지부터 체크해야 함.
             # 왜냐하면 같은 지점이어도 어느 곳에서부터 접근했는지에 따라
             # 연결이 될 수도 안 될 수도 있기 때문.
@@ -52,32 +44,36 @@ def bfs(r, c, visited):
                 continue
             visited[y][x] = True
             queue.append((y, x))
-            q_len += 1
             union.append((y, x))
             union_sum += arr[y][x]
 
-        pivot += 1
-
-    if len(union) == 1:
-        return False
-
-    new_pop = union_sum // len(union)
-    for r, c in union:
-        arr[r][c] = new_pop
-    return True
+    return union, union_sum
 
 
+queue = [(r, c) for c in range(N) for r in range(N)]
 for day in range(0, 2001):
+    next_q = []
+
     visited = [[False] * N for _ in range(N)]
     is_moved = False
 
-    for r in range(N):
-        for c in range(N):
-            if not visited[r][c]:
-                result = bfs(r, c, visited)
-                if result:
-                    is_moved = True
+    for r, c in queue:
+        if not visited[r][c]:
+            union, union_sum = bfs(r, c, visited)
+
+            if len(union) > 1:
+                # XXX: 새로 바뀐 부분만 검사하기 (실행 시간 4800ms 단축)
+                # 왜냐하면 대부분이 연합이 아니고, 일부분에만 연합이 있을 수 있음.
+                # 이전에 연합이 아니었던 부분은, 바뀔 일이 없으므로
+                # 다음에도 검사할 필요가 없음.
+                next_q.extend(list(union))
+                new_pop = union_sum // len(union)
+                for r, c in union:
+                    arr[r][c] = new_pop
+                is_moved = True
 
     if not is_moved:
         print(day)
         break
+
+    queue = next_q
