@@ -8,13 +8,24 @@
 같은 날 중엔 이미 체크한 곳은 지나가야 함
 """
 
-from collections import deque
-
 N, L, R = map(int, input().split())
 arr = [list(map(int, input().split())) for _ in range(N)]
 
 dy = (-1, 0, 1, 0)
 dx = (0, -1, 0, 1)
+
+# 미리 이웃이 될 수 있는 좌표들 저장 (1200ms 감소)
+neighbors = {}
+for r in range(N):
+    for c in range(N):
+        temp = []
+        for i in range(4):
+            y = r + dy[i]
+            x = c + dx[i]
+
+            if 0 <= y < N and 0 <= x < N:
+                temp.append((y, x))
+        neighbors[(r, c)] = temp
 
 
 def bfs(r, c, visited):
@@ -22,17 +33,14 @@ def bfs(r, c, visited):
     union_sum = arr[r][c]
 
     visited[r][c] = True
-    queue = deque([(r, c)])
-    while queue:
-        r, c = queue.popleft()
+    # deque 대신에 인덱스 활용 (500ms 감소)
+    queue = [(r, c)]
+    q_len = 1
+    pivot = 0
+    while pivot < q_len:
+        r, c = queue[pivot]
 
-        for i in range(4):
-            y = r + dy[i]
-            x = c + dx[i]
-
-            if not (0 <= y < N and 0 <= x < N):
-                continue
-
+        for y, x in neighbors[(r, c)]:
             # XXX: 방문 여부보다 연결이 가능한지부터 체크해야 함.
             # 왜냐하면 같은 지점이어도 어느 곳에서부터 접근했는지에 따라
             # 연결이 될 수도 안 될 수도 있기 때문.
@@ -44,8 +52,11 @@ def bfs(r, c, visited):
                 continue
             visited[y][x] = True
             queue.append((y, x))
+            q_len += 1
             union.append((y, x))
             union_sum += arr[y][x]
+
+        pivot += 1
 
     if len(union) == 1:
         return False
