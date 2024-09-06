@@ -43,7 +43,8 @@ def solution(board):
             visited.add(next_)
 
             ((r1, c1), (r2, c2)) = next_
-            if n_board[r1][c1] == N or n_board[r2][c2] == N:
+            # XXX: 값이 N이 아니라, 좌표를 비교해야 함...
+            if (r1 == N and c1 == N) or (r2 == N and c2 == N):
                 return time + 1
             else:
                 queue.append((((r1, c1), (r2, c2)), time + 1))
