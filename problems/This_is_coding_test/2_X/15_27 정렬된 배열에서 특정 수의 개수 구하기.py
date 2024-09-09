@@ -9,9 +9,10 @@ def binary_search_left(arr, x) -> int:
         else:
             left = mid + 1
 
-    target = right
-    if arr[target] == x:
-        return target
+    # XXX: 현재 배열에 있는 것보다 더 큰 숫자인 경우, left는 배열 범위를 벗어나게 됨
+    # => 범위 체크 필요. 이게 1회차 때보다 더 효율적임. (한 번만 판단하니까)
+    if left < len(arr) and arr[left] == x:
+        return left
     else:
         return -1
 
@@ -27,9 +28,8 @@ def binary_search_right(arr, x) -> int:
         else:
             left = mid + 1
 
-    target = left
-    if arr[target] == x:
-        return target
+    if 0 <= right and arr[right] == x:
+        return right
     else:
         return -1
 
@@ -49,3 +49,7 @@ else:
 7 2
 1 1 2 2 2 2 3 
 """  # 4
+"""
+7 4
+1 1 2 2 2 2 3 
+"""  # -1
