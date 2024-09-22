@@ -6,6 +6,8 @@
 공유기가 많으면 거리를 늘린다.
 공유기가 같으면 거리를 늘린다.
 """
+import sys
+input = sys.stdin.readline
 
 
 def count_available_setup_by_dist(arr, gap):
@@ -23,7 +25,8 @@ arr = [int(input()) for _ in range(N)]
 arr.sort()
 
 min_d = 0
-max_d = N - 1
+# XXX: 거리의 최댓값으로 비교
+max_d = arr[N - 1]
 
 answer = 0
 while min_d <= max_d:
