@@ -14,12 +14,21 @@ table = [0] * (N + 1)
 for today in range(N - 1, -1, -1):
     time, pay = days[today]
 
-    # 기간이 퇴사일을 넘기면 상담 불가
     if today + time > N:
-        continue
-
-    # 오늘의 수익 비교
-    # 이때 마지막 날이 가능한 경우도 있으니, table 크기를 1 늘려줬음.
-    table[today] = max(pay + table[today + time], table[today + 1])
+        # 기간이 퇴사일을 넘기면 상담 불가
+        # XXX: continue를 하면 안 됨. 다음 날 기록을 그대로 가져 와야 함.
+        table[today] = table[today + 1]
+    else:
+        # 오늘의 수익 비교
+        # 이때 마지막 날이 가능한 경우도 있으니, table 크기를 1 늘려줬음.
+        table[today] = max(pay + table[today + time], table[today + 1])
 
 print(table[0])
+
+"""
+반례 출처: https://www.acmicpc.net/board/view/138171
+3
+5 10
+2 10
+1 10
+"""  # 10
