@@ -13,8 +13,6 @@
     못 먹으면 종료
 먹은 물고기 최댓값 구하기
 """
-from copy import deepcopy
-
 
 arr = [[(0, 0)] * 4 for _ in range(4)]
 for row in range(4):
@@ -63,8 +61,7 @@ def move_fish(arr, shark_y, shark_x):
             break
 
     # XXX: return 문 들여쓰기 잘못함.
-    # 이 경우엔, return 문을 빼는 게 나음
-    # 다른 경우엔, 미리 return 문을 작성해놓기.
+    # 아예 함수 시작부터 return문 써놓기.
     return arr
 
 
@@ -77,12 +74,16 @@ def dfs(row, col, eaten, arr):
 
     arr = move_fish(arr, row, col)
 
-    for i in range(3):
+    # XXX: 범위가 3이 아니라 4까지 가야 함. 그래야 3칸까지 감.
+    # 방금 먹은 곳은 굳이 체크할 필요가 없긴 하니, 1부터 시작해도 됨.
+    for i in range(1, 4):
         y = row + dy[direct] * i
         x = col + dx[direct] * i
 
         if (0 <= y < 4 and 0 <= x < 4) and arr[y][x][0] > 0:
-            dfs(y, x, eaten, deepcopy(arr))
+            # deepcopy 대신에 슬라이싱 활용 (20ms 단축)
+            new_arr = [line[:] for line in arr]
+            dfs(y, x, eaten, new_arr)
         # XXX: 완전 새 복사본을 넘기므로, 이전으로 복구할 필요없음.
         # eaten_sum -= fish
         # arr[y][x] = (fish, direct)
