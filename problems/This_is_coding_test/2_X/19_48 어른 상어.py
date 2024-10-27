@@ -45,6 +45,7 @@ for row in range(N):
             sharks.append((shark, row, col, directs[shark]))
             # 맨 처음 냄새 뿌림
             odor_counts[row][col] = k
+sharks.sort()
 
 dy = (-1, 1, 0, 0)
 dx = (0, 0, -1, 1)
@@ -88,6 +89,8 @@ def move():
 
                 # 처음 들어가거나, 한 칸에 여러 상어가 있을 시, 작은 것만 남음.
                 if arr[y][x] == 0 or shark < arr[y][x]:
+                    # XXX: 작은 것만 남아야 하는데, 이미 기존 큰 게 append 해버렸음...
+                    # 상어가 1부터 순서대로 들어가면 되긴 함.
                     new_sharks.append((shark, y, x, d))
                     # XXX: 바로 arr에도 반영했어야 함.
                     arr[y][x] = shark
@@ -143,29 +146,3 @@ for t in range(1001):
 
 if len(sharks) > 1:
     print(-1)
-
-"""
-5 4 4
-0 0 0 0 3
-0 2 0 0 0
-1 0 0 0 4
-0 0 0 0 0
-0 0 0 0 0
-4 4 3 1
-2 3 1 4
-4 1 2 3
-3 4 2 1
-4 3 1 2
-2 4 3 1
-2 1 3 4
-3 4 1 2
-4 1 2 3
-4 3 2 1
-1 4 3 2
-1 3 2 4
-3 2 1 4
-3 4 1 2
-3 2 4 1
-1 4 2 3
-1 4 2 3
-"""
