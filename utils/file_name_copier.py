@@ -17,7 +17,9 @@ def copy_file_names(prev_path: Path, new_path: Path) -> None:
 
 if __name__ == "__main__":
     root = Path(__file__).parent.parent
-    prev_path = root / "problems/This_is_coding_test/1_X"
-    new_path = root / "problems/This_is_coding_test/2_X"
+    prev_path = root / "problems/This_is_coding_test/2_X"
+    new_path = root / "problems/This_is_coding_test/3_X"
+    if not new_path.exists():
+        new_path.mkdir()
 
     copy_file_names(prev_path, new_path)
