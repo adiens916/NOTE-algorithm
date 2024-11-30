@@ -14,35 +14,22 @@ def union(a: int, b: int, parents: list[int]) -> None:
         parents[ap] = bp
 
 
-from collections import deque
-
-def get_edges_bfs(graph: list[list[int]]) -> list[tuple[int, int, int]]:
+def get_edges(graph: list[list[int]]) -> list[tuple[int, int, int]]:
     # 인접 행렬 기준
-
-    N = len(graph)
-    visited = [False] * N
-    queue = deque()
-
-    start = 1
-    visited[start] = True
-    queue.append(start)
+    # XXX: visited가 1차원인 경우, 노드만 중복되지 않게 검사함.
+    # 그래서 아직 방문 안 한 간선이 있어도, 이미 방문한 노드는 스킵되어 간선 부족해짐.
+    # ⇒ (A) 간선이 중복되지 않아야 하므로 visited는 2차원으로 구현 필요 (인접 리스트에도 유효)
+    # ⇒ (B) 인접 행렬이니까 visited 없이 간단하게 우측 상단만 읽어도 됨.
 
     result = []
+    start = 1
+    N = len(graph)
 
-    while queue:
-        start = queue.popleft()
-
-        for i in range(N):
-            if visited[i]:
-                continue
-
-            edge = graph[start][i]
+    for row in range(start, N):
+        for col in range(row + 1, N):
+            edge = graph[row][col]
             if edge > 0:
-                # XXX: 행렬이라 연결되지 않은 것도 검색 필요.
-                # 연결되어 있어야만 방문 설정하기
-                visited[i] = True
-                result.append((edge, start, i))
-                queue.append(i)
+                result.append((edge, row, col))
 
     return result
 
@@ -51,7 +38,7 @@ def kruskal(graph: list[list[int]]) -> int:
     parents = [i for i in range(len(graph))]
     edge_sum = 0
 
-    edges = get_edges_bfs(graph)
+    edges = get_edges(graph)
     # 굳이 heap 필요 없는 듯. 결국 heap도 정렬을 위한 수단이니까.
     edges.sort()
 
