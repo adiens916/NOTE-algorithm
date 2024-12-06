@@ -7,9 +7,11 @@ def solution(food_times, k):
     foods.sort()
     prev_t = 0
     for i in range(len(foods)):
-        cur_t = foods[i][0] - prev_t
+        # XXX: 시간 그 자체만 갱신해야 하는데, 시간 사이 간격으로 갱신하고 있었음...
+        # 헷갈리니까, 하나의 변수는 하나의 대상만 가리키도록 하자.
+        cur_t = foods[i][0]
         remain_num = len(foods) - i
-        total_t = cur_t * remain_num
+        total_t = (cur_t - prev_t) * remain_num
 
         if total_t <= k:
             k -= total_t
@@ -29,3 +31,8 @@ def solution(food_times, k):
 food_times = [3, 1, 2]
 k = 5
 print(solution(food_times, k))
+
+"""
+12 55 25 17 18
+91
+"""  # 2
