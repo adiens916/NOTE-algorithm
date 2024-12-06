@@ -24,3 +24,21 @@ class Int(Element):
         인스턴스를 직접 호출하면 랜덤 정수 반환
         """
         return random.randint(self.min_val, self.max_val)
+
+
+class ElementList(ABC):
+    @abstractmethod
+    def __call__(self):
+        pass
+
+
+class IntList(ElementList):
+    def __init__(self, min_val: int, max_val: int, min_len: int, max_len: int):
+        self.min_val = min_val
+        self.max_val = max_val
+        self.min_len = min_len
+        self.max_len = max_len
+
+    def __call__(self) -> list[int]:
+        length = random.randint(self.min_len, self.max_len)
+        return [random.randint(self.min_val, self.max_val) for _ in range(length)]

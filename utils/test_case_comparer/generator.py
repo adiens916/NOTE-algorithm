@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from element import Element, Int
+from element import Element, ElementList, Int, IntList
 
 
 class TestCaseGenerator:
@@ -13,25 +13,27 @@ class TestCaseGenerator:
         return TestCaseGenerator.stringify(test_case)
 
     @staticmethod
-    def load(template: List[List[Union[Element, int]]]) -> List[List[int]]:
+    def load(template: List[List[Union[Element, ElementList, int]]]) -> List[List[int]]:
         """
         주어진 템플릿을 기반으로 테스트 케이스 생성
 
         :param template: Int 또는 int를 포함하는 여러 리스트들
         :return: 생성된 테스트 케이스들
         """
-        generated_cases = []
+        result = []
         for line in template:
-            case = []
+            line_after = []
             for val in line:
                 if isinstance(val, Element):
-                    case.append(val())
+                    line_after.append(val())
+                elif isinstance(val, ElementList):
+                    line_after.extend(val())
                 elif isinstance(val, int):
-                    case.append(val)
+                    line_after.append(val)
                 else:
                     raise TypeError(f"Unsupported type: {type(val)} in template")
-            generated_cases.append(case)
-        return generated_cases
+            result.append(line_after)
+        return result
 
     @staticmethod
     def stringify(data: List[List[int]],
@@ -55,9 +57,9 @@ if __name__ == "__main__":
     # 기본 사용법
     n = Int(0, 10)
     result = TestCaseGenerator.load([
-        [n, n, n],
         [1, 2, 3],
-        [n]
+        [n, n, n],
+        [10, IntList(0, 10, 1, 3), -1]
     ])
     print("생성된 테스트 케이스:")
     print(result)
