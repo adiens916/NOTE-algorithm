@@ -47,18 +47,12 @@ class TestCaseComparer:
         :param n: 실행 반복 횟수
         """
         for test_index in range(1, n + 1):
-            print(f"Test Case {test_index}:")
-
             # 테스트 케이스 생성
             test_case = self._generate_test_case()
 
-            # 각 테스트 케이스에 대해 메서드 결과 비교
-            print(f"Input: {test_case}")
-
             # 메서드 결과 비교
             method_results = self._collect_method_results(test_case)
-            self._compare_results(method_results)
-            print()  # 테스트 케이스 간 구분
+            self._compare_results(method_results, test_index, test_case)
 
     def _generate_test_case(self) -> str:
         """
@@ -97,7 +91,7 @@ class TestCaseComparer:
 
         return method_results
 
-    def _compare_results(self, method_results):
+    def _compare_results(self, method_results, test_index, test_case):
         """
         메서드 결과를 비교합니다.
 
@@ -108,8 +102,12 @@ class TestCaseComparer:
 
             for result in method_results[1:]:
                 if result['result'] != baseline:
+                    print(f"Test Case {test_index}:")
+                    print(f"Input: {test_case}")
+                    print(f"Result1: {baseline}")
                     print(f"Method '{result['name']}' DIFFERENT:")
-                    print(f"Result: {result['result']}")
+                    print(f"Result2: {result['result']}")
+                    print()  # 테스트 케이스 간 구분
 
 
 # 사용 예시
